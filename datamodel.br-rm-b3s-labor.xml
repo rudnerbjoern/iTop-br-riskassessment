@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.5">
+    <!--
+    * @license     https://www.gnu.org/licenses/gpl-3.0.en.html
+    -->
+    <classes>
+        <class id="FunctionalCI" _delta="must_exist">
+            <fields>
+                <field id="rm_confidentiality" xsi:type="AttributeEnum" _delta="define">
+                    <sql>rm_confidentiality</sql>
+                    <is_null_allowed>true</is_null_allowed>
+                    <display_style>list</display_style>
+                    <values>
+                        <value id="normal">normal</value>
+                        <value id="high">high</value>
+                        <value id="veryhigh">veryhigh</value>
+                        <!-- iTop 3.0:
+                        <value id="normal">
+                            <code>normal</code>
+                            <style>
+                                <main_color>#06D902</main_color>
+                                <complementary_color>#FFFFFF</complementary_color>
+                            </style>
+                        </value>
+                        <value id="high">
+                            <code>high</code>
+                            <style>
+                                <main_color>#FFF200</main_color>
+                                <complementary_color>#000000</complementary_color>
+                            </style>
+                        </value>
+                        <value id="veryhigh">
+                            <code>veryhigh</code>
+                            <style>
+                                <main_color>#FF0000</main_color>
+                                <complementary_color>#FFFFFF</complementary_color>
+                            </style>
+                        </value>
+                       -->
+                    </values>
+                </field>
+                <field id="rm_integrity" xsi:type="AttributeEnum" _delta="define">
+                    <sql>rm_integrity</sql>
+                    <is_null_allowed>true</is_null_allowed>
+                    <display_style>list</display_style>
+                    <values>
+                        <value id="normal">normal</value>
+                        <value id="high">high</value>
+                        <value id="veryhigh">veryhigh</value>
+                        <!-- iTop 3.0:
+                        <value id="normal">
+                            <code>normal</code>
+                            <style>
+                                <main_color>#06D902</main_color>
+                                <complementary_color>#FFFFFF</complementary_color>
+                            </style>
+                        </value>
+                        <value id="high">
+                            <code>high</code>
+                            <style>
+                                <main_color>#FFF200</main_color>
+                                <complementary_color>#000000</complementary_color>
+                            </style>
+                        </value>
+                        <value id="veryhigh">
+                            <code>veryhigh</code>
+                            <style>
+                                <main_color>#FF0000</main_color>
+                                <complementary_color>#FFFFFF</complementary_color>
+                            </style>
+                        </value>
+                       -->
+                    </values>
+                </field>
+                <field id="rm_availability" xsi:type="AttributeEnum" _delta="define">
+                    <sql>rm_availability</sql>
+                    <is_null_allowed>true</is_null_allowed>
+                    <display_style>list</display_style>
+                    <values>
+                        <value id="normal">normal</value>
+                        <value id="high">high</value>
+                        <value id="veryhigh">veryhigh</value>
+                        <!-- iTop 3.0:
+                        <value id="normal">
+                            <code>normal</code>
+                            <style>
+                                <main_color>#06D902</main_color>
+                                <complementary_color>#FFFFFF</complementary_color>
+                            </style>
+                        </value>
+                        <value id="high">
+                            <code>high</code>
+                            <style>
+                                <main_color>#FFF200</main_color>
+                                <complementary_color>#000000</complementary_color>
+                            </style>
+                        </value>
+                        <value id="veryhigh">
+                            <code>veryhigh</code>
+                            <style>
+                                <main_color>#FF0000</main_color>
+                                <complementary_color>#FFFFFF</complementary_color>
+                            </style>
+                        </value>
+                       -->
+                    </values>
+                </field>
+            </fields>
+        </class>
+
+
+        <class id="VirtualMachine" _delta="if_exists">
+            <presentation>
+                <details>
+                    <items>
+                        <item id="col:col2" _delta="must_exist">
+                            <rank>90</rank>
+                            <items>
+                                <item id="fieldset:Server:riskmanagement" _delta="define">
+                                    <rank>15</rank>
+                                    <items>
+                                        <item id="rm_confidentiality">
+                                            <rank>10</rank>
+                                        </item>
+                                        <item id="rm_integrity">
+                                            <rank>20</rank>
+                                        </item>
+                                        <item id="rm_availability">
+                                            <rank>30</rank>
+                                        </item>
+                                    </items>
+                                </item>
+                            </items>
+                        </item>
+                    </items>
+                </details>
+                <search>
+                    <items>
+                        <item id="rm_confidentiality" _delta="define">
+                            <rank>60</rank>
+                        </item>
+                        <item id="rm_integrity" _delta="define">
+                            <rank>70</rank>
+                        </item>
+                        <item id="rm_availability" _delta="define">
+                            <rank>80</rank>
+                        </item>
+                    </items>
+                </search>
+            </presentation>
+        </class>
+        <class id="NetworkDevice" _delta="must_exist">
+            <presentation>
+                <details>
+                    <items>
+                        <item id="col:col2" _delta="must_exist">
+                            <rank>90</rank>
+                            <items>
+                                <item id="fieldset:Server:riskmanagement" _delta="define">
+                                    <rank>15</rank>
+                                    <items>
+                                        <item id="rm_confidentiality">
+                                            <rank>10</rank>
+                                        </item>
+                                        <item id="rm_integrity">
+                                            <rank>20</rank>
+                                        </item>
+                                        <item id="rm_availability">
+                                            <rank>30</rank>
+                                        </item>
+                                    </items>
+                                </item>
+                            </items>
+                        </item>
+                    </items>
+                </details>
+                <search>
+                    <items>
+                        <item id="rm_confidentiality" _delta="define">
+                            <rank>170</rank>
+                        </item>
+                        <item id="rm_integrity" _delta="define">
+                            <rank>180</rank>
+                        </item>
+                        <item id="rm_availability" _delta="define">
+                            <rank>190</rank>
+                        </item>
+                    </items>
+                </search>
+            </presentation>
+        </class>
+        <class id="Server" _delta="must_exist">
+            <presentation>
+                <details>
+                    <items>
+                        <item id="col:col2">
+                            <rank>130</rank>
+                            <items>
+                                <item id="fieldset:Server:riskmanagement" _delta="define">
+                                    <rank>30</rank>
+                                    <items>
+                                        <item id="rm_confidentiality">
+                                            <rank>10</rank>
+                                        </item>
+                                        <item id="rm_integrity">
+                                            <rank>20</rank>
+                                        </item>
+                                        <item id="rm_availability">
+                                            <rank>30</rank>
+                                        </item>
+                                    </items>
+                                </item>
+                            </items>
+                        </item>
+                    </items>
+                </details>
+                <search>
+                    <items>
+                        <item id="rm_confidentiality" _delta="define">
+                            <rank>170</rank>
+                        </item>
+                        <item id="rm_integrity" _delta="define">
+                            <rank>180</rank>
+                        </item>
+                        <item id="rm_availability" _delta="define">
+                            <rank>190</rank>
+                        </item>
+                    </items>
+                </search>
+            </presentation>
+        </class>
+        <class id="ApplicationSolution" _delta="must_exist">
+            <presentation>
+                <details>
+                    <items>
+                        <item id="fieldset:Server:riskmanagement" _delta="define">
+                            <rank>150</rank>
+                            <items>
+                                <item id="rm_confidentiality">
+                                    <rank>10</rank>
+                                </item>
+                                <item id="rm_integrity">
+                                    <rank>20</rank>
+                                </item>
+                                <item id="rm_availability">
+                                    <rank>30</rank>
+                                </item>
+                            </items>
+                        </item>
+                    </items>
+                </details>
+                <search>
+                    <items>
+                        <item id="rm_confidentiality" _delta="define">
+                            <rank>70</rank>
+                        </item>
+                        <item id="rm_integrity" _delta="define">
+                            <rank>80</rank>
+                        </item>
+                        <item id="rm_availability" _delta="define">
+                            <rank>90</rank>
+                        </item>
+                    </items>
+                </search>
+            </presentation>
+        </class>
+    </classes>
+</itop_design>

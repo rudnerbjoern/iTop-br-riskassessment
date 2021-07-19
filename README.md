@@ -1,4 +1,4 @@
-# iTop-br-riskidentification-b3s-labor
+# iTop-br-rm-b3s-labor
 
 Copyright (C) 2021 Björn Rudner
 

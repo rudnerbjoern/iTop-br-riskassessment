@@ -10,11 +10,11 @@
 
 SetupWebPage::AddModule(
     __FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-    'br-riskidentification-b3s-labor/0.1.0',
+    'br-rm-b3s-labor/0.1.0',
     array(
         // Identification
         //
-        'label' => 'Datamodel: B3S Labor - Riskidentification',
+        'label' => 'Datamodel: B3S Labor - Risikomanagement',
         'category' => 'business',
 
         // Setup
@@ -28,7 +28,7 @@ SetupWebPage::AddModule(
         // Components
         //
         'datamodel' => array(
-            'model.br-riskidentification-b3s-labor.php',
+            'model.br-rm-b3s-labor.php',
         ),
         'webservice' => array(),
         'data.struct' => array(
