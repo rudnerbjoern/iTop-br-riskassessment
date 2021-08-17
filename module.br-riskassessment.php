@@ -3,18 +3,18 @@
 /**
  * @copyright   Copyright (C) 2021 Björn Rudner
  * @license     https://www.gnu.org/licenses/gpl-3.0.en.html
- * @version     2021-07-19
+ * @version     2021-08-17
  *
  * iTop module definition file
  */
 
 SetupWebPage::AddModule(
     __FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-    'br-rm-b3s-labor/0.1.0',
+    'br-riskassessment/0.2.0',
     array(
         // Identification
         //
-        'label' => 'Datamodel: B3S Labor - Risikomanagement',
+        'label' => 'Datamodel: Risk Assessment',
         'category' => 'business',
 
         // Setup
@@ -28,7 +28,7 @@ SetupWebPage::AddModule(
         // Components
         //
         'datamodel' => array(
-            'model.br-rm-b3s-labor.php',
+            'model.br-riskassessment.php',
         ),
         'webservice' => array(),
         'data.struct' => array(

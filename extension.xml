@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <extension format="1.0">
     <extension_code>
-        <![CDATA[br-rm-b3s-labor]]>
+        <![CDATA[br-riskassessment]]>
     </extension_code>
     <company>
         <![CDATA[]]>
@@ -10,16 +10,16 @@
         <![CDATA[Björn Rudner]]>
     </author>
     <label>
-        <![CDATA[Datamodel: B3S Labor - Risikomanagement]]>
+        <![CDATA[Datamodel: Risk Assessment]]>
     </label>
     <description>
         <![CDATA[Adds the ability to document risk parameters on CIs.]]>
     </description>
     <version>
-        <![CDATA[0.1.0]]>
+        <![CDATA[0.2.0]]>
     </version>
     <release_date>
-        <![CDATA[2021-07-19]]>
+        <![CDATA[2021-08-17]]>
     </release_date>
     <version_description>
         <![CDATA[]]>
@@ -30,6 +30,6 @@
     <status>stable</status>
     <mandatory>false</mandatory>
     <more_info_url>
-        <![CDATA[https://github.com/rudnerbjoern/iTop-br-rm-b3s-labor/blob/main/README.md]]>
+        <![CDATA[https://github.com/rudnerbjoern/iTop-br-riskassessment/blob/main/README.md]]>
     </more_info_url>
 </extension>
