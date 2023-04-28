@@ -322,5 +322,46 @@
                 </search>
             </presentation>
         </class>
+        <class id="BusinessProcess" _delta="must_exist">
+            <presentation>
+                <details>
+                    <items>
+                        <item id="fieldset:Server:riskmanagement" _delta="define">
+                            <rank>150</rank>
+                            <items>
+                                <item id="rm_confidentiality">
+                                    <rank>10</rank>
+                                </item>
+                                <item id="rm_integrity">
+                                    <rank>20</rank>
+                                </item>
+                                <item id="rm_availability">
+                                    <rank>30</rank>
+                                </item>
+                                <item id="rm_authenticity">
+                                    <rank>40</rank>
+                                </item>
+                            </items>
+                        </item>
+                    </items>
+                </details>
+                <search>
+                    <items>
+                        <item id="rm_confidentiality" _delta="define">
+                            <rank>70</rank>
+                        </item>
+                        <item id="rm_integrity" _delta="define">
+                            <rank>80</rank>
+                        </item>
+                        <item id="rm_availability" _delta="define">
+                            <rank>90</rank>
+                        </item>
+                        <item id="rm_authenticity" _delta="define">
+                            <rank>100</rank>
+                        </item>
+                    </items>
+                </search>
+            </presentation>
+        </class>
     </classes>
 </itop_design>
