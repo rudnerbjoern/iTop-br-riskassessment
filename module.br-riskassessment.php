@@ -10,7 +10,7 @@
 
 SetupWebPage::AddModule(
     __FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-    'br-riskassessment/0.3.0',
+    'br-riskassessment/0.4.0',
     array(
         // Identification
         //
@@ -58,6 +58,97 @@ if (!class_exists('RiskAssessmentInstaller')) {
     {
         public static function AfterDatabaseCreation(Config $oConfiguration, $sPreviousVersion, $sCurrentVersion)
         {
+            // Create audit rules introduced in Version 0.4.0
+            if (version_compare($sPreviousVersion, '0.4.0', '<')) {
+                SetupPage::log_info("|- Installing Risk Assessment from '$sPreviousVersion' to '$sCurrentVersion'. The extension comes with audit rules so corresponding objects will created into the DB...");
+
+                if (MetaModel::IsValidClass('AuditRule')) {
+                    // First, create audit category for Server mismatch
+                    $oSearch = DBObjectSearch::FromOQL('SELECT AuditCategory WHERE name = "Risk Management Mismatch"');
+                    $oSet = new DBObjectSet($oSearch);
+                    $oAuditCategory = $oSet->Fetch();
+
+                    if ($oAuditCategory === null) {
+                        try {
+                            $oAuditCategory = MetaModel::NewObject('AuditCategory', array(
+                                'name' => 'Risk Management Mismatch',
+                                'description' => 'Show FunctionalCIs with higher demand of information security then provided',
+                                'definition_set' => 'SELECT FunctionalCI',
+                            ));
+                            $oAuditCategory->DBWrite();
+                            SetupPage::log_info('|  |- AuditCategory "Risk Management Mismatch" created.');
+                        } catch (Exception $oException) {
+                            SetupPage::log_info('|  |- Could not create AuditCategory. (Error: ' . $oException->getMessage() . ')');
+                        }
+                    } else {
+                        SetupPage::log_info('|  |- AuditCategory "Risk Management Mismatch" already existing! Weird as it is supposed to be created by this extension, but meh, will use it anyway!');
+                    }
+
+                    // Then, create audit rules
+                    $aAuditRules = array(
+                        array(
+                            'name' => '01 - AppSolution Conf > FunctionalCI Conf',
+                            'description' => 'Demand for confidentiality is higher then provided',
+                            'query' =>  "SELECT FunctionalCI AS f\n" .
+                                "JOIN lnkApplicationSolutionToFunctionalCI AS lnk ON lnk.functionalci_id = f.id\n" .
+                                "JOIN ApplicationSolution AS a ON lnk.applicationsolution_id = a.id\n" .
+                                "WHERE lnk.functionalci_id_finalclass_recall != 'ApplicationSolution'\n" .
+                                "AND lnk.functionalci_id_finalclass_recall IN ('Server', 'Farm', 'Hypervisor', 'VirtualMachine')\n" .
+                                "AND (((a.rm_confidentiality = 'veryhigh') AND (f.rm_confidentiality != 'veryhigh'))\n" .
+                                "OR ((a.rm_confidentiality = 'high') AND (f.rm_confidentiality NOT IN ('veryhigh', 'high')))\n" .
+                                "OR ((a.rm_confidentiality = 'normal') AND (f.rm_confidentiality NOT IN ('veryhigh', 'high', 'normal'))))",
+                            'valid_flag' => 'false',
+                        ),
+                        array(
+                            'name' => '02 - AppSolution Int > FunctionalCI Int',
+                            'description' => 'Demand for integrity is higher then provided',
+                            'query' =>  "SELECT FunctionalCI AS f\n" .
+                                "JOIN lnkApplicationSolutionToFunctionalCI AS lnk ON lnk.functionalci_id = f.id\n" .
+                                "JOIN ApplicationSolution AS a ON lnk.applicationsolution_id = a.id\n" .
+                                "WHERE lnk.functionalci_id_finalclass_recall != 'ApplicationSolution'\n" .
+                                "AND lnk.functionalci_id_finalclass_recall IN ('Server', 'Farm', 'Hypervisor', 'VirtualMachine')\n" .
+                                "AND (((a.rm_integrity = 'veryhigh') AND (f.rm_integrity != 'veryhigh'))\n" .
+                                "OR ((a.rm_integrity = 'high') AND (f.rm_integrity NOT IN ('veryhigh', 'high')))\n" .
+                                "OR ((a.rm_integrity = 'normal') AND (f.rm_integrity NOT IN ('veryhigh', 'high', 'normal'))))",
+                            'valid_flag' => 'false',
+                        ),
+                        array(
+                            'name' => '03 - AppSolution Avail > FunctionalCI Avail',
+                            'description' => 'Demand for availability is higher then provided',
+                            'query' =>  "SELECT FunctionalCI AS f\n" .
+                                "JOIN lnkApplicationSolutionToFunctionalCI AS lnk ON lnk.functionalci_id = f.id\n" .
+                                "JOIN ApplicationSolution AS a ON lnk.applicationsolution_id = a.id\n" .
+                                "WHERE lnk.functionalci_id_finalclass_recall != 'ApplicationSolution'\n" .
+                                "AND lnk.functionalci_id_finalclass_recall IN ('Server', 'Farm', 'Hypervisor', 'VirtualMachine')\n" .
+                                "AND (((a.rm_availability = 'veryhigh') AND (f.rm_availability != 'veryhigh'))\n" .
+                                "OR ((a.rm_availability = 'high') AND (f.rm_availability NOT IN ('veryhigh', 'high')))\n" .
+                                "OR ((a.rm_availability = 'normal') AND (f.rm_availability NOT IN ('veryhigh', 'high', 'normal'))))",
+                            'valid_flag' => 'false',
+                        ),
+                        array(
+                            'name' => '04 - AppSolution Auth > FunctionalCI Auth',
+                            'description' => 'Demand for authenticity is higher then provided',
+                            'query' =>  "SELECT FunctionalCI AS f\n" .
+                                "JOIN lnkApplicationSolutionToFunctionalCI AS lnk ON lnk.functionalci_id = f.id\n" .
+                                "JOIN ApplicationSolution AS a ON lnk.applicationsolution_id = a.id\n" .
+                                "WHERE lnk.functionalci_id_finalclass_recall != 'ApplicationSolution'\n" .
+                                "AND lnk.functionalci_id_finalclass_recall IN ('Server', 'Farm', 'Hypervisor', 'VirtualMachine')\n" .
+                                "AND ((a.rm_authenticity = 'high') AND (f.rm_authenticity != 'high'))",
+                            'valid_flag' => 'false',
+                        ),
+                    );
+                    foreach ($aAuditRules as $aAuditRule) {
+                        try {
+                            $oAuditRule = MetaModel::NewObject('AuditRule', $aAuditRule);
+                            $oAuditRule->Set('category_id', $oAuditCategory->GetKey());
+                            $oAuditRule->DBWrite();
+                            SetupPage::log_info('|  |- AuditRule "' . $aAuditRule['name'] . '" created.');
+                        } catch (Exception $oException) {
+                            SetupPage::log_info('|  |- Could not create AuditRule "' . $aAuditRule['name'] . '". (Error: ' . $oException->getMessage() . ')');
+                        }
+                    }
+                }
+            }
         }
     }
 };
