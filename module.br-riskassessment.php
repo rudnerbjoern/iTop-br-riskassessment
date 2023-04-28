@@ -94,9 +94,9 @@ if (!class_exists('RiskAssessmentInstaller')) {
                                 "JOIN ApplicationSolution AS a ON lnk.applicationsolution_id = a.id\n" .
                                 "WHERE lnk.functionalci_id_finalclass_recall != 'ApplicationSolution'\n" .
                                 "AND lnk.functionalci_id_finalclass_recall IN ('Server', 'Farm', 'Hypervisor', 'VirtualMachine')\n" .
-                                "AND (((a.rm_confidentiality = 'veryhigh') AND (f.rm_confidentiality != 'veryhigh'))\n" .
-                                "OR ((a.rm_confidentiality = 'high') AND (f.rm_confidentiality NOT IN ('veryhigh', 'high')))\n" .
-                                "OR ((a.rm_confidentiality = 'normal') AND (f.rm_confidentiality NOT IN ('veryhigh', 'high', 'normal'))))",
+                                "AND (((a.rm_confidentiality = 'veryhigh') AND (ISNULL(f.rm_confidentiality) OR f.rm_confidentiality != 'veryhigh'))\n" .
+                                "OR ((a.rm_confidentiality = 'high') AND (ISNULL(f.rm_confidentiality) OR f.rm_confidentiality NOT IN ('veryhigh', 'high')))\n" .
+                                "OR ((a.rm_confidentiality = 'normal') AND (ISNULL(f.rm_confidentiality) OR f.rm_confidentiality NOT IN ('veryhigh', 'high', 'normal'))))",
                             'valid_flag' => 'false',
                         ),
                         array(
@@ -107,9 +107,9 @@ if (!class_exists('RiskAssessmentInstaller')) {
                                 "JOIN ApplicationSolution AS a ON lnk.applicationsolution_id = a.id\n" .
                                 "WHERE lnk.functionalci_id_finalclass_recall != 'ApplicationSolution'\n" .
                                 "AND lnk.functionalci_id_finalclass_recall IN ('Server', 'Farm', 'Hypervisor', 'VirtualMachine')\n" .
-                                "AND (((a.rm_integrity = 'veryhigh') AND (f.rm_integrity != 'veryhigh'))\n" .
-                                "OR ((a.rm_integrity = 'high') AND (f.rm_integrity NOT IN ('veryhigh', 'high')))\n" .
-                                "OR ((a.rm_integrity = 'normal') AND (f.rm_integrity NOT IN ('veryhigh', 'high', 'normal'))))",
+                                "AND (((a.rm_integrity = 'veryhigh') AND (ISNULL(f.rm_integrity) OR f.rm_integrity != 'veryhigh'))\n" .
+                                "OR ((a.rm_integrity = 'high') AND (ISNULL(f.rm_integrity) OR f.rm_integrity NOT IN ('veryhigh', 'high')))\n" .
+                                "OR ((a.rm_integrity = 'normal') AND (ISNULL(f.rm_integrity) OR f.rm_integrity NOT IN ('veryhigh', 'high', 'normal'))))",
                             'valid_flag' => 'false',
                         ),
                         array(
@@ -120,9 +120,9 @@ if (!class_exists('RiskAssessmentInstaller')) {
                                 "JOIN ApplicationSolution AS a ON lnk.applicationsolution_id = a.id\n" .
                                 "WHERE lnk.functionalci_id_finalclass_recall != 'ApplicationSolution'\n" .
                                 "AND lnk.functionalci_id_finalclass_recall IN ('Server', 'Farm', 'Hypervisor', 'VirtualMachine')\n" .
-                                "AND (((a.rm_availability = 'veryhigh') AND (f.rm_availability != 'veryhigh'))\n" .
-                                "OR ((a.rm_availability = 'high') AND (f.rm_availability NOT IN ('veryhigh', 'high')))\n" .
-                                "OR ((a.rm_availability = 'normal') AND (f.rm_availability NOT IN ('veryhigh', 'high', 'normal'))))",
+                                "AND (((a.rm_availability = 'veryhigh') AND (ISNULL(f.rm_availability) OR f.rm_availability != 'veryhigh'))\n" .
+                                "OR ((a.rm_availability = 'high') AND (ISNULL(f.rm_availability) OR f.rm_availability NOT IN ('veryhigh', 'high')))\n" .
+                                "OR ((a.rm_availability = 'normal') AND (ISNULL(f.rm_availability) OR f.rm_availability NOT IN ('veryhigh', 'high', 'normal'))))",
                             'valid_flag' => 'false',
                         ),
                         array(
@@ -133,7 +133,7 @@ if (!class_exists('RiskAssessmentInstaller')) {
                                 "JOIN ApplicationSolution AS a ON lnk.applicationsolution_id = a.id\n" .
                                 "WHERE lnk.functionalci_id_finalclass_recall != 'ApplicationSolution'\n" .
                                 "AND lnk.functionalci_id_finalclass_recall IN ('Server', 'Farm', 'Hypervisor', 'VirtualMachine')\n" .
-                                "AND ((a.rm_authenticity = 'high') AND (f.rm_authenticity != 'high'))",
+                                "AND ((a.rm_authenticity = 'high') AND (ISNULL(f.rm_authenticity) OR f.rm_authenticity != 'high'))",
                             'valid_flag' => 'false',
                         ),
                     );
