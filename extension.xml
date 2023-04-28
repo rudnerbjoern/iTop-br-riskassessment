@@ -16,16 +16,16 @@
         <![CDATA[Adds the ability to document risk parameters on CIs.]]>
     </description>
     <version>
-        <![CDATA[0.2.0]]>
+        <![CDATA[0.3.0]]>
     </version>
     <release_date>
-        <![CDATA[2021-08-17]]>
+        <![CDATA[2023-04-28]]>
     </release_date>
     <version_description>
         <![CDATA[]]>
     </version_description>
     <itop_version_min>
-        <![CDATA[2.7.1]]>
+        <![CDATA[2.7.5]]>
     </itop_version_min>
     <status>stable</status>
     <mandatory>false</mandatory>
