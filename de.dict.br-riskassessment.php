@@ -3,7 +3,7 @@
 /**
  * @copyright   Copyright (C) 2021 Björn Rudner
  * @license     https://www.gnu.org/licenses/gpl-3.0.en.html
- * @version     2023-04-28
+ * @version     2023-08-04
  *
  * Localized data
  */
@@ -35,4 +35,8 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
     'Class:FunctionalCI/Attribute:rm_authenticity+' => 'Welchen Schutzbedarf an Authentizität hat das Objekt?',
     'Class:FunctionalCI/Attribute:rm_authenticity/Value:none' => 'keine',
     'Class:FunctionalCI/Attribute:rm_authenticity/Value:high' => 'hoch',
+    'Class:FunctionalCI/Attribute:rm_nonrepudiation' => 'Verbindlichkeit',
+    'Class:FunctionalCI/Attribute:rm_nonrepudiation+' => 'Welchen Schutzbedarf an Verbindlichkeit hat das Objekt?',
+    'Class:FunctionalCI/Attribute:rm_nonrepudiation/Value:none' => 'keine',
+    'Class:FunctionalCI/Attribute:rm_nonrepudiation/Value:high' => 'hoch',
 ));

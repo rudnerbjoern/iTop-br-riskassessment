@@ -1,6 +1,6 @@
 # iTop-br-riskassessment
 
-Copyright (c) 2021-2022 Björn Rudner
+Copyright (c) 2021-2023 Björn Rudner
 [![License](https://img.shields.io/github/license/rudnerbjoern/iTop-br-riskassessment)](https://github.com/rudnerbjoern/iTop-br-riskassessment/blob/main/LICENSE)
 
 ## What?
@@ -44,6 +44,13 @@ The level of availability can be:
 ### Authenticity
 
 Authenticity is not provided as levels. It is either needed or not:
+
+* none
+* high
+
+### Non-repudiation
+
+Non-repudiation is not provided as levels. It is either needed or not:
 
 * none
 * high

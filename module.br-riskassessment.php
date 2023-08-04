@@ -3,14 +3,14 @@
 /**
  * @copyright   Copyright (C) 2021 Björn Rudner
  * @license     https://www.gnu.org/licenses/gpl-3.0.en.html
- * @version     2023-04-28
+ * @version     2023-08-04
  *
  * iTop module definition file
  */
 
 SetupWebPage::AddModule(
     __FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-    'br-riskassessment/0.4.0',
+    'br-riskassessment/0.5.0',
     array(
         // Identification
         //
@@ -140,6 +140,62 @@ if (!class_exists('RiskAssessmentInstaller')) {
                     foreach ($aAuditRules as $aAuditRule) {
                         try {
                             $oAuditRule = MetaModel::NewObject('AuditRule', $aAuditRule);
+                            $oAuditRule->Set('category_id', $oAuditCategory->GetKey());
+                            $oAuditRule->DBWrite();
+                            SetupPage::log_info('|  |- AuditRule "' . $aAuditRule['name'] . '" created.');
+                        } catch (Exception $oException) {
+                            SetupPage::log_info('|  |- Could not create AuditRule "' . $aAuditRule['name'] . '". (Error: ' . $oException->getMessage() . ')');
+                        }
+                    }
+                }
+            }
+
+            // Extend audit rules introduced in Version 0.5.0
+            if (version_compare($sPreviousVersion, '0.5.0', '<')) {
+                SetupPage::log_info("|- Installing Risk Assessment from '$sPreviousVersion' to '$sCurrentVersion'. The extension adds audit rules so corresponding objects will created into the DB...");
+
+                if (MetaModel::IsValidClass('AuditRule')) {
+                    // First, create audit category for Server mismatch
+                    $oSearch = DBObjectSearch::FromOQL('SELECT AuditCategory WHERE name = "Risk Management Mismatch"');
+                    $oSet = new DBObjectSet($oSearch);
+                    $oAuditCategory = $oSet->Fetch();
+
+                    if ($oAuditCategory === null) {
+                        try {
+                            $oAuditCategory = MetaModel::NewObject('AuditCategory', array(
+                                'name' => 'Risk Management Mismatch',
+                                'description' => 'Show FunctionalCIs with higher demand of information security then provided',
+                                'definition_set' => 'SELECT FunctionalCI',
+                            ));
+                            $oAuditCategory->DBWrite();
+                            SetupPage::log_info('|  |- AuditCategory "Risk Management Mismatch" created.');
+                        } catch (Exception $oException) {
+                            SetupPage::log_info('|  |- Could not create AuditCategory. (Error: ' . $oException->getMessage() . ')');
+                        }
+                    } else {
+                        SetupPage::log_info('|  |- AuditCategory "Risk Management Mismatch" already existing! We will use it!');
+                    }
+
+                    // Then, create audit rules
+                    $aAuditRules = array(
+                        array(
+                            'name' => '05 - AppSolution Non-Rep > FunctionalCI Non-Rep',
+                            'description' => 'Demand for non-repudiation is higher then provided',
+                            'query' =>  "SELECT FunctionalCI AS f\n" .
+                                "JOIN lnkApplicationSolutionToFunctionalCI AS lnk ON lnk.functionalci_id = f.id\n" .
+                                "JOIN ApplicationSolution AS a ON lnk.applicationsolution_id = a.id\n" .
+                                "WHERE lnk.functionalci_id_finalclass_recall != 'ApplicationSolution'\n" .
+                                "AND lnk.functionalci_id_finalclass_recall IN ('Server', 'Farm', 'Hypervisor', 'VirtualMachine')\n" .
+                                "AND ((a.rm_nonrepudiation = 'high') AND (ISNULL(f.rm_authenticity) OR f.rm_nonrepudiation != 'high'))",
+                            'valid_flag' => 'false',
+                        ),
+                    );
+                    foreach ($aAuditRules as $aAuditRule) {
+                        try {
+                            $oAuditRule = MetaModel::NewObject(
+                                'AuditRule',
+                                $aAuditRule
+                            );
                             $oAuditRule->Set('category_id', $oAuditCategory->GetKey());
                             $oAuditRule->DBWrite();
                             SetupPage::log_info('|  |- AuditRule "' . $aAuditRule['name'] . '" created.');

@@ -3,7 +3,7 @@
 /**
  * @copyright   Copyright (C) 2021 Björn Rudner
  * @license     https://www.gnu.org/licenses/gpl-3.0.en.html
- * @version     2023-04-28
+ * @version     2023-08-04
  *
  * Localized data
  */
@@ -35,4 +35,8 @@ Dict::Add('EN US', 'English', 'English', array(
     'Class:FunctionalCI/Attribute:rm_authenticity+' => 'What is the authenticity required for the object?',
     'Class:FunctionalCI/Attribute:rm_authenticity/Value:none' => 'none',
     'Class:FunctionalCI/Attribute:rm_authenticity/Value:high' => 'high',
+    'Class:FunctionalCI/Attribute:rm_nonrepudiation' => 'Non-repudiation',
+    'Class:FunctionalCI/Attribute:rm_nonrepudiation+' => 'What is the non-repudiation required for the object?',
+    'Class:FunctionalCI/Attribute:rm_nonrepudiation/Value:none' => 'none',
+    'Class:FunctionalCI/Attribute:rm_nonrepudiation/Value:high' => 'high',
 ));
