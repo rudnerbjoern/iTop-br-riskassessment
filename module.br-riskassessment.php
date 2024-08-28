@@ -10,7 +10,7 @@
 
 SetupWebPage::AddModule(
     __FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-    'br-riskassessment/0.5.1',
+    'br-riskassessment/0.6.0',
     array(
         // Identification
         //
