@@ -3,14 +3,14 @@
 /**
  * @copyright   Copyright (C) 2021 Björn Rudner
  * @license     https://www.gnu.org/licenses/gpl-3.0.en.html
- * @version     2023-08-04
+ * @version     2024-08-28
  *
  * iTop module definition file
  */
 
 SetupWebPage::AddModule(
     __FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-    'br-riskassessment/0.5.0',
+    'br-riskassessment/0.6.0',
     array(
         // Identification
         //
@@ -60,7 +60,7 @@ if (!class_exists('RiskAssessmentInstaller')) {
         {
             // Create audit rules introduced in Version 0.4.0
             if (version_compare($sPreviousVersion, '0.4.0', '<')) {
-                SetupPage::log_info("|- Installing Risk Assessment from '$sPreviousVersion' to '$sCurrentVersion'. The extension comes with audit rules so corresponding objects will created into the DB...");
+                SetupLog::Info("|- Installing Risk Assessment from '$sPreviousVersion' to '$sCurrentVersion'. The extension comes with audit rules so corresponding objects will created into the DB...");
 
                 if (MetaModel::IsValidClass('AuditRule')) {
                     // First, create audit category for Server mismatch
@@ -76,12 +76,12 @@ if (!class_exists('RiskAssessmentInstaller')) {
                                 'definition_set' => 'SELECT FunctionalCI',
                             ));
                             $oAuditCategory->DBWrite();
-                            SetupPage::log_info('|  |- AuditCategory "Risk Management Mismatch" created.');
+                            SetupLog::Info('|  |- AuditCategory "Risk Management Mismatch" created.');
                         } catch (Exception $oException) {
-                            SetupPage::log_info('|  |- Could not create AuditCategory. (Error: ' . $oException->getMessage() . ')');
+                            SetupLog::Info('|  |- Could not create AuditCategory. (Error: ' . $oException->getMessage() . ')');
                         }
                     } else {
-                        SetupPage::log_info('|  |- AuditCategory "Risk Management Mismatch" already existing! Weird as it is supposed to be created by this extension, but meh, will use it anyway!');
+                        SetupLog::Info('|  |- AuditCategory "Risk Management Mismatch" already existing! Weird as it is supposed to be created by this extension, but meh, will use it anyway!');
                     }
 
                     // Then, create audit rules
@@ -142,9 +142,9 @@ if (!class_exists('RiskAssessmentInstaller')) {
                             $oAuditRule = MetaModel::NewObject('AuditRule', $aAuditRule);
                             $oAuditRule->Set('category_id', $oAuditCategory->GetKey());
                             $oAuditRule->DBWrite();
-                            SetupPage::log_info('|  |- AuditRule "' . $aAuditRule['name'] . '" created.');
+                            SetupLog::Info('|  |- AuditRule "' . $aAuditRule['name'] . '" created.');
                         } catch (Exception $oException) {
-                            SetupPage::log_info('|  |- Could not create AuditRule "' . $aAuditRule['name'] . '". (Error: ' . $oException->getMessage() . ')');
+                            SetupLog::Info('|  |- Could not create AuditRule "' . $aAuditRule['name'] . '". (Error: ' . $oException->getMessage() . ')');
                         }
                     }
                 }
@@ -152,7 +152,7 @@ if (!class_exists('RiskAssessmentInstaller')) {
 
             // Extend audit rules introduced in Version 0.5.0
             if (version_compare($sPreviousVersion, '0.5.0', '<')) {
-                SetupPage::log_info("|- Installing Risk Assessment from '$sPreviousVersion' to '$sCurrentVersion'. The extension adds audit rules so corresponding objects will created into the DB...");
+                SetupLog::Info("|- Installing Risk Assessment from '$sPreviousVersion' to '$sCurrentVersion'. The extension adds audit rules so corresponding objects will created into the DB...");
 
                 if (MetaModel::IsValidClass('AuditRule')) {
                     // First, create audit category for Server mismatch
@@ -168,12 +168,12 @@ if (!class_exists('RiskAssessmentInstaller')) {
                                 'definition_set' => 'SELECT FunctionalCI',
                             ));
                             $oAuditCategory->DBWrite();
-                            SetupPage::log_info('|  |- AuditCategory "Risk Management Mismatch" created.');
+                            SetupLog::Info('|  |- AuditCategory "Risk Management Mismatch" created.');
                         } catch (Exception $oException) {
-                            SetupPage::log_info('|  |- Could not create AuditCategory. (Error: ' . $oException->getMessage() . ')');
+                            SetupLog::Info('|  |- Could not create AuditCategory. (Error: ' . $oException->getMessage() . ')');
                         }
                     } else {
-                        SetupPage::log_info('|  |- AuditCategory "Risk Management Mismatch" already existing! We will use it!');
+                        SetupLog::Info('|  |- AuditCategory "Risk Management Mismatch" already existing! We will use it!');
                     }
 
                     // Then, create audit rules
@@ -198,9 +198,9 @@ if (!class_exists('RiskAssessmentInstaller')) {
                             );
                             $oAuditRule->Set('category_id', $oAuditCategory->GetKey());
                             $oAuditRule->DBWrite();
-                            SetupPage::log_info('|  |- AuditRule "' . $aAuditRule['name'] . '" created.');
+                            SetupLog::Info('|  |- AuditRule "' . $aAuditRule['name'] . '" created.');
                         } catch (Exception $oException) {
-                            SetupPage::log_info('|  |- Could not create AuditRule "' . $aAuditRule['name'] . '". (Error: ' . $oException->getMessage() . ')');
+                            SetupLog::Info('|  |- Could not create AuditRule "' . $aAuditRule['name'] . '". (Error: ' . $oException->getMessage() . ')');
                         }
                     }
                 }

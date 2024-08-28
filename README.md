@@ -55,4 +55,8 @@ Non-repudiation is not provided as levels. It is either needed or not:
 * none
 * high
 
+## iTop Compatibility
+
+The extension was tested on iTop 2.7.11 and 3.1.1
+
 ## Attribution
