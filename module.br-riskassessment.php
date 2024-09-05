@@ -1,16 +1,16 @@
 <?php
 
 /**
- * @copyright   Copyright (C) 2021 Björn Rudner
+ * @copyright   Copyright (C) 2022-2024 Björn Rudner
  * @license     https://www.gnu.org/licenses/gpl-3.0.en.html
- * @version     2024-08-28
+ * @version     2024-09-05
  *
  * iTop module definition file
  */
 
 SetupWebPage::AddModule(
     __FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-    'br-riskassessment/0.6.0',
+    'br-riskassessment/3.1.7',
     array(
         // Identification
         //
@@ -20,7 +20,7 @@ SetupWebPage::AddModule(
         // Setup
         //
         'dependencies' => array(
-            '(itop-config-mgmt/2.5.0 & itop-config-mgmt/<3.0.0)||itop-structure/3.0.0'
+            'itop-structure/3.0.0'
         ),
         'mandatory' => false,
         'visible' => true,
