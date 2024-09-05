@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @copyright   Copyright (C) 2021 Björn Rudner
+ * @copyright   Copyright (C) 2022-2024 Björn Rudner
  * @license     https://www.gnu.org/licenses/gpl-3.0.en.html
- * @version     2024-08-28
+ * @version     2024-09-05
  *
  * iTop module definition file
  */
@@ -28,7 +28,9 @@ SetupWebPage::AddModule(
 
         // Components
         //
-        'datamodel' => array(),
+        'datamodel' => array(
+            'model.br-riskassessment.php',
+        ),
         'webservice' => array(),
         'data.struct' => array(
             // add your 'structure' definition XML files here,
