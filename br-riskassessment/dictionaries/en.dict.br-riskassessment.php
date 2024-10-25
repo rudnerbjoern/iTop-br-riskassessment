@@ -3,7 +3,7 @@
 /**
  * @copyright   Copyright (C) 2024 Björn Rudner
  * @license     https://www.gnu.org/licenses/gpl-3.0.en.html
- * @version     2024-09-05
+ * @version     2024-10-25
  *
  * Localized data
  */
@@ -39,4 +39,11 @@ Dict::Add('EN US', 'English', 'English', array(
     'Class:FunctionalCI/Attribute:rm_nonrepudiation+' => 'What is the non-repudiation required for the object?',
     'Class:FunctionalCI/Attribute:rm_nonrepudiation/Value:none' => 'none',
     'Class:FunctionalCI/Attribute:rm_nonrepudiation/Value:high' => 'high',
+    'Class:FunctionalCI/Attribute:bcm_rpo' => 'BCM: RPO',
+    'Class:FunctionalCI/Attribute:bcm_rpo+' => 'Recovery Point Objective',
+    'Class:FunctionalCI/Attribute:bcm_rto' => 'BCM: RTO',
+    'Class:FunctionalCI/Attribute:bcm_rto+' => 'Recovery Time Objective',
+    'Class:FunctionalCI/Attribute:bcm_mtd' => 'BCM: MTD',
+    'Class:FunctionalCI/Attribute:bcm_mtd+' => 'Maximum Tolerable Downtime',
+    'Class:FunctionalCI/Error:MtdMustBeGreaterThanRto' => 'The MTD value must be equal to or greater than the RTO value.',
 ));
