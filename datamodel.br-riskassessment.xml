@@ -16,29 +16,6 @@
                         <value id="normal">normal</value>
                         <value id="high">high</value>
                         <value id="veryhigh">veryhigh</value>
-                        <!-- iTop 3.0:
-                        <value id="normal">
-                            <code>normal</code>
-                            <style>
-                                <main_color>#06D902</main_color>
-                                <complementary_color>#FFFFFF</complementary_color>
-                            </style>
-                        </value>
-                        <value id="high">
-                            <code>high</code>
-                            <style>
-                                <main_color>#FFF200</main_color>
-                                <complementary_color>#000000</complementary_color>
-                            </style>
-                        </value>
-                        <value id="veryhigh">
-                            <code>veryhigh</code>
-                            <style>
-                                <main_color>#FF0000</main_color>
-                                <complementary_color>#FFFFFF</complementary_color>
-                            </style>
-                        </value>
-                       -->
                     </values>
                 </field>
                 <field id="rm_integrity" xsi:type="AttributeEnum" _delta="define">
@@ -50,29 +27,6 @@
                         <value id="normal">normal</value>
                         <value id="high">high</value>
                         <value id="veryhigh">veryhigh</value>
-                        <!-- iTop 3.0:
-                        <value id="normal">
-                            <code>normal</code>
-                            <style>
-                                <main_color>#06D902</main_color>
-                                <complementary_color>#FFFFFF</complementary_color>
-                            </style>
-                        </value>
-                        <value id="high">
-                            <code>high</code>
-                            <style>
-                                <main_color>#FFF200</main_color>
-                                <complementary_color>#000000</complementary_color>
-                            </style>
-                        </value>
-                        <value id="veryhigh">
-                            <code>veryhigh</code>
-                            <style>
-                                <main_color>#FF0000</main_color>
-                                <complementary_color>#FFFFFF</complementary_color>
-                            </style>
-                        </value>
-                       -->
                     </values>
                 </field>
                 <field id="rm_availability" xsi:type="AttributeEnum" _delta="define">
@@ -84,29 +38,6 @@
                         <value id="normal">normal</value>
                         <value id="high">high</value>
                         <value id="veryhigh">veryhigh</value>
-                        <!-- iTop 3.0:
-                        <value id="normal">
-                            <code>normal</code>
-                            <style>
-                                <main_color>#06D902</main_color>
-                                <complementary_color>#FFFFFF</complementary_color>
-                            </style>
-                        </value>
-                        <value id="high">
-                            <code>high</code>
-                            <style>
-                                <main_color>#FFF200</main_color>
-                                <complementary_color>#000000</complementary_color>
-                            </style>
-                        </value>
-                        <value id="veryhigh">
-                            <code>veryhigh</code>
-                            <style>
-                                <main_color>#FF0000</main_color>
-                                <complementary_color>#FFFFFF</complementary_color>
-                            </style>
-                        </value>
-                       -->
                     </values>
                 </field>
                 <field id="rm_authenticity" xsi:type="AttributeEnum" _delta="define">
@@ -116,29 +47,6 @@
                     <values>
                         <value id="none">none</value>
                         <value id="high">high</value>
-                        <!-- iTop 3.0:
-                        <value id="normal">
-                            <code>normal</code>
-                            <style>
-                                <main_color>#06D902</main_color>
-                                <complementary_color>#FFFFFF</complementary_color>
-                            </style>
-                        </value>
-                        <value id="high">
-                            <code>high</code>
-                            <style>
-                                <main_color>#FFF200</main_color>
-                                <complementary_color>#000000</complementary_color>
-                            </style>
-                        </value>
-                        <value id="veryhigh">
-                            <code>veryhigh</code>
-                            <style>
-                                <main_color>#FF0000</main_color>
-                                <complementary_color>#FFFFFF</complementary_color>
-                            </style>
-                        </value>
-                       -->
                     </values>
                 </field>
                 <field id="rm_nonrepudiation" xsi:type="AttributeEnum" _delta="define">
@@ -148,29 +56,6 @@
                     <values>
                         <value id="none">none</value>
                         <value id="high">high</value>
-                        <!-- iTop 3.0:
-                        <value id="normal">
-                            <code>normal</code>
-                            <style>
-                                <main_color>#06D902</main_color>
-                                <complementary_color>#FFFFFF</complementary_color>
-                            </style>
-                        </value>
-                        <value id="high">
-                            <code>high</code>
-                            <style>
-                                <main_color>#FFF200</main_color>
-                                <complementary_color>#000000</complementary_color>
-                            </style>
-                        </value>
-                        <value id="veryhigh">
-                            <code>veryhigh</code>
-                            <style>
-                                <main_color>#FF0000</main_color>
-                                <complementary_color>#FFFFFF</complementary_color>
-                            </style>
-                        </value>
-                       -->
                     </values>
                 </field>
                 <field id="bcm_rpo" xsi:type="AttributeDuration" _delta="define">
@@ -186,42 +71,7 @@
                     <is_null_allowed>true</is_null_allowed>
                 </field>
             </fields>
-            <event_listeners>
-                <event_listener id="CheckBCM" _delta="define">
-                    <event>EVENT_DB_CHECK_TO_WRITE</event>
-                    <callback>CheckBCMOnUpdate</callback>
-                    <rank>1</rank>
-                </event_listener>
-            </event_listeners>
-            <methods>
-                <method id="CheckBCMOnUpdate">
-                    <static>false</static>
-                    <access>public</access>
-                    <type>EventListener</type>
-                    <code>
-                        <![CDATA[public function CheckBCMOnUpdate(Combodo\iTop\Service\Events\EventData $oEventData)
-{
-    // Retrieve changes and check for presence of relevant fields in a single operation
-    $aChanges = $this->ListChanges();
-    $bRTOChanged = isset($aChanges['bcm_rto']);
-    $bMTDChanged = isset($aChanges['bcm_mtd']);
-
-    // If RTO or MTD changed, validate their relationship
-    if ($bRTOChanged || $bMTDChanged) {
-        $iRTO = intval($this->Get('bcm_rto'));
-        $iMTD = intval($this->Get('bcm_mtd'));
-
-        // Check if MTD is less than RTO when RTO is greater than zero
-        if ($iRTO > 0 && $iMTD < $iRTO) {
-            $this->AddCheckIssue(Dict::Format('Class:FunctionalCI/Error:MtdMustBeGreaterThanRto'));
-        }
-    }
-}]]>
-                    </code>
-                </method>
-            </methods>
         </class>
-
         <class id="VirtualMachine" _delta="if_exists">
             <presentation>
                 <details>

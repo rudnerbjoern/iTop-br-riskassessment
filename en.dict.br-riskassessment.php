@@ -45,5 +45,4 @@ Dict::Add('EN US', 'English', 'English', array(
     'Class:FunctionalCI/Attribute:bcm_rto+' => 'Recovery Time Objective',
     'Class:FunctionalCI/Attribute:bcm_mtd' => 'BCM: MTD',
     'Class:FunctionalCI/Attribute:bcm_mtd+' => 'Maximum Tolerable Downtime',
-    'Class:FunctionalCI/Error:MtdMustBeGreaterThanRto' => 'The MTD value must be equal to or greater than the RTO value.',
 ));
