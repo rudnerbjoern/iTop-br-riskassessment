@@ -1,68 +1,99 @@
 # iTop-br-riskassessment
 
-Copyright (c) 2021-2023 Björn Rudner
 [![License](https://img.shields.io/github/license/rudnerbjoern/iTop-br-riskassessment)](https://github.com/rudnerbjoern/iTop-br-riskassessment/blob/main/LICENSE)
 
-## What?
+A powerful iTop extension adding enhanced fields for documenting essential aspects of risk management and business continuity, including confidentiality, integrity, availability, authenticity, and non-repudiation, along with BCM details like RPO, RTO, and MTD.
 
-Additional fields to document
+---
 
-* confidentiality
-* integrity
-* availability
-* authenticity
+## Overview
 
-in iTop.
+This extension introduces additional fields for comprehensive risk management documentation within iTop, specifically covering:
+
+- **Confidentiality**
+- **Integrity**
+- **Availability**
+- **Authenticity**
+- **Non-repudiation**
+- **BCM (Business Continuity Management)**:
+  - RPO (Recovery Point Objective)
+  - RTO (Recovery Time Objective)
+  - MTD (Maximum Tolerable Downtime)
+
+![Additional fields for Risk Management](Screenshots/RiskManagementFields.png)
+
+## Field Descriptions
 
 ### Confidentiality
 
-The levels of confidentiality can be:
+Defines the level of confidentiality requirements:
 
-* none
-* normal
-* high
-* very high
+- **None**
+- **Normal**
+- **High**
+- **Very High**
 
 ### Integrity
 
-The level of integrity can be:
+Defines the level of data integrity requirements:
 
-* none
-* normal
-* high
-* very high
+- **None**
+- **Normal**
+- **High**
+- **Very High**
 
 ### Availability
 
-The level of availability can be:
+Defines the level of system availability requirements:
 
-* none
-* normal
-* high
-* very high
+- **None**
+- **Normal**
+- **High**
+- **Very High**
 
 ### Authenticity
 
-Authenticity is not provided as levels. It is either needed or not:
+Defines whether authenticity checks are required:
 
-* none
-* high
+- **None**
+- **High**
 
 ### Non-repudiation
 
-Non-repudiation is not provided as levels. It is either needed or not:
+Defines whether non-repudiation checks are required:
 
-* none
-* high
+- **None**
+- **High**
 
-## iTop Compatibility
+### Business Continuity Management (BCM)
 
-The branch [2.7](https://github.com/rudnerbjoern/iTop-br-riskassessment/tree/itop/2.7) is compatible to iTop 2.7 and iTop 3.1.
+Key BCM metrics to aid in recovery planning:
 
-The branch [main](https://github.com/rudnerbjoern/iTop-br-riskassessment/tree/main) will only be compatible to iTop 3.1.
+- **RPO**: Recovery Point Objective – the maximum acceptable data loss in case of an incident.
+- **RTO**: Recovery Time Objective – the target time for restoring operations after an incident.
+- **MTD**: Maximum Tolerable Downtime – the maximum time the organization can sustain without critical functions.
 
-Versions starting with 2.7.x are kept compatible to iTop 2.7
+## Compatibility
 
-The extension was tested on iTop 2.7.10 and 3.1.1
+### iTop Version Compatibility
 
-## Attribution
+The extension is compatible with the following versions of iTop:
+
+- **iTop 2.7 and 3.1**: [2.7 branch](https://github.com/rudnerbjoern/iTop-br-riskassessment/tree/itop/2.7)
+- **iTop 3.1 and above**: [Main branch](https://github.com/rudnerbjoern/iTop-br-riskassessment/tree/main)
+
+This extension has been successfully tested on iTop versions:
+
+- 2.7.10
+- 3.1.1
+- 3.2.0-2
+
+## License & Attribution
+
+This project is licensed under the GPL-3.0 License © 2021-2024 Björn Rudner.
+
+For details, refer to the [LICENSE](https://github.com/rudnerbjoern/iTop-br-riskassessment/blob/main/LICENSE) file.
+
+---
+
+With this iTop extension, enhance your organization’s approach to risk management by ensuring all critical risk and BCM metrics are documented effectively and centrally.
