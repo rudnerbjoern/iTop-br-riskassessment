@@ -191,7 +191,53 @@
                         </value>
                     </values>
                 </field>
+                <field id="bcm_rpo" xsi:type="AttributeDuration" _delta="define">
+                    <sql>bcm_rpo</sql>
+                    <is_null_allowed>true</is_null_allowed>
+                </field>
+                <field id="bcm_rto" xsi:type="AttributeDuration" _delta="define">
+                    <sql>bcm_rto</sql>
+                    <is_null_allowed>true</is_null_allowed>
+                </field>
+                <field id="bcm_mtd" xsi:type="AttributeDuration" _delta="define">
+                    <sql>bcm_mtd</sql>
+                    <is_null_allowed>true</is_null_allowed>
+                </field>
             </fields>
+            <event_listeners>
+                <event_listener id="CheckBCM" _delta="define">
+                    <event>EVENT_DB_CHECK_TO_WRITE</event>
+                    <callback>CheckBCMOnUpdate</callback>
+                    <rank>1</rank>
+                </event_listener>
+            </event_listeners>
+            <methods>
+                <method id="CheckBCMOnUpdate">
+                    <static>false</static>
+                    <access>public</access>
+                    <type>EventListener</type>
+                    <code>
+                        <![CDATA[public function CheckBCMOnUpdate(Combodo\iTop\Service\Events\EventData $oEventData)
+{
+    // Retrieve changes and check for presence of relevant fields in a single operation
+    $aChanges = $this->ListChanges();
+    $bRTOChanged = isset($aChanges['bcm_rto']);
+    $bMTDChanged = isset($aChanges['bcm_mtd']);
+
+    // If RTO or MTD changed, validate their relationship
+    if ($bRTOChanged || $bMTDChanged) {
+        $iRTO = intval($this->Get('bcm_rto'));
+        $iMTD = intval($this->Get('bcm_mtd'));
+
+        // Check if MTD is less than RTO when RTO is greater than zero
+        if ($iRTO > 0 && $iMTD < $iRTO) {
+            $this->AddCheckIssue(Dict::Format('Class:FunctionalCI/Error:MtdMustBeGreaterThanRto'));
+        }
+    }
+}]]>
+                    </code>
+                </method>
+            </methods>
         </class>
         <class id="VirtualMachine" _delta="if_exists">
             <presentation>
@@ -217,6 +263,15 @@
                                         </item>
                                         <item id="rm_nonrepudiation">
                                             <rank>50</rank>
+                                        </item>
+                                        <item id="bcm_rpo">
+                                            <rank>60</rank>
+                                        </item>
+                                        <item id="bcm_rto">
+                                            <rank>70</rank>
+                                        </item>
+                                        <item id="bcm_mtd">
+                                            <rank>80</rank>
                                         </item>
                                     </items>
                                 </item>
@@ -270,6 +325,15 @@
                                         <item id="rm_nonrepudiation">
                                             <rank>50</rank>
                                         </item>
+                                        <item id="bcm_rpo">
+                                            <rank>60</rank>
+                                        </item>
+                                        <item id="bcm_rto">
+                                            <rank>70</rank>
+                                        </item>
+                                        <item id="bcm_mtd">
+                                            <rank>80</rank>
+                                        </item>
                                     </items>
                                 </item>
                             </items>
@@ -322,6 +386,15 @@
                                         <item id="rm_nonrepudiation">
                                             <rank>50</rank>
                                         </item>
+                                        <item id="bcm_rpo">
+                                            <rank>60</rank>
+                                        </item>
+                                        <item id="bcm_rto">
+                                            <rank>70</rank>
+                                        </item>
+                                        <item id="bcm_mtd">
+                                            <rank>80</rank>
+                                        </item>
                                     </items>
                                 </item>
                             </items>
@@ -371,6 +444,15 @@
                                 <item id="rm_nonrepudiation">
                                     <rank>50</rank>
                                 </item>
+                                <item id="bcm_rpo">
+                                    <rank>60</rank>
+                                </item>
+                                <item id="bcm_rto">
+                                    <rank>70</rank>
+                                </item>
+                                <item id="bcm_mtd">
+                                    <rank>80</rank>
+                                </item>
                             </items>
                         </item>
                     </items>
@@ -417,6 +499,15 @@
                                 </item>
                                 <item id="rm_nonrepudiation">
                                     <rank>50</rank>
+                                </item>
+                                <item id="bcm_rpo">
+                                    <rank>60</rank>
+                                </item>
+                                <item id="bcm_rto">
+                                    <rank>70</rank>
+                                </item>
+                                <item id="bcm_mtd">
+                                    <rank>80</rank>
                                 </item>
                             </items>
                         </item>
