@@ -246,7 +246,7 @@
                         <item id="col:col2" _delta="must_exist">
                             <rank>90</rank>
                             <items>
-                                <item id="fieldset:Server:riskmanagement" _delta="define">
+                                <item id="fieldset:FunctionalCI:RiskManagement" _delta="define">
                                     <rank>15</rank>
                                     <items>
                                         <item id="rm_confidentiality">
@@ -307,7 +307,7 @@
                         <item id="col:col2" _delta="must_exist">
                             <rank>90</rank>
                             <items>
-                                <item id="fieldset:Server:riskmanagement" _delta="define">
+                                <item id="fieldset:FunctionalCI:RiskManagement" _delta="define">
                                     <rank>15</rank>
                                     <items>
                                         <item id="rm_confidentiality">
@@ -368,7 +368,7 @@
                         <item id="col:col2">
                             <rank>130</rank>
                             <items>
-                                <item id="fieldset:Server:riskmanagement" _delta="define">
+                                <item id="fieldset:FunctionalCI:RiskManagement" _delta="define">
                                     <rank>30</rank>
                                     <items>
                                         <item id="rm_confidentiality">
@@ -426,7 +426,7 @@
             <presentation>
                 <details>
                     <items>
-                        <item id="fieldset:Server:riskmanagement" _delta="define">
+                        <item id="fieldset:FunctionalCI:RiskManagement" _delta="define">
                             <rank>150</rank>
                             <items>
                                 <item id="rm_confidentiality">
@@ -482,7 +482,7 @@
             <presentation>
                 <details>
                     <items>
-                        <item id="fieldset:Server:riskmanagement" _delta="define">
+                        <item id="fieldset:FunctionalCI:RiskManagement" _delta="define">
                             <rank>150</rank>
                             <items>
                                 <item id="rm_confidentiality">
