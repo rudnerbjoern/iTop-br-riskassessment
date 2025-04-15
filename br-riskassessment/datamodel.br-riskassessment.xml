@@ -246,7 +246,7 @@
                         <item id="col:col2" _delta="must_exist">
                             <rank>90</rank>
                             <items>
-                                <item id="fieldset:Server:riskmanagement" _delta="define">
+                                <item id="fieldset:FunctionalCI:RiskManagement" _delta="define">
                                     <rank>15</rank>
                                     <items>
                                         <item id="rm_confidentiality">
@@ -307,7 +307,7 @@
                         <item id="col:col2" _delta="must_exist">
                             <rank>90</rank>
                             <items>
-                                <item id="fieldset:Server:riskmanagement" _delta="define">
+                                <item id="fieldset:FunctionalCI:RiskManagement" _delta="define">
                                     <rank>15</rank>
                                     <items>
                                         <item id="rm_confidentiality">
@@ -368,7 +368,7 @@
                         <item id="col:col2">
                             <rank>130</rank>
                             <items>
-                                <item id="fieldset:Server:riskmanagement" _delta="define">
+                                <item id="fieldset:FunctionalCI:RiskManagement" _delta="define">
                                     <rank>30</rank>
                                     <items>
                                         <item id="rm_confidentiality">
@@ -426,7 +426,7 @@
             <presentation>
                 <details>
                     <items>
-                        <item id="fieldset:Server:riskmanagement" _delta="define">
+                        <item id="fieldset:FunctionalCI:RiskManagement" _delta="define">
                             <rank>150</rank>
                             <items>
                                 <item id="rm_confidentiality">
@@ -482,7 +482,7 @@
             <presentation>
                 <details>
                     <items>
-                        <item id="fieldset:Server:riskmanagement" _delta="define">
+                        <item id="fieldset:FunctionalCI:RiskManagement" _delta="define">
                             <rank>150</rank>
                             <items>
                                 <item id="rm_confidentiality">
@@ -535,4 +535,202 @@
             </presentation>
         </class>
     </classes>
+    <user_rights>
+        <groups>
+            <group id="RiskManagement" _delta="define">
+                <classes>
+                    <class id="ApplicationSolution" />
+                    <class id="BusinessProcess" />
+                </classes>
+            </group>
+        </groups>
+        <profiles>
+            <profile id="12712" _delta="define">
+                <name>Risk Manager</name>
+                <description>Person in charge of the documentation of risks</description>
+                <groups>
+                    <group id="History">
+                        <actions>
+                            <action id="action:bulk read">allow</action>
+                        </actions>
+                    </group>
+                    <group id="RiskManagement">
+                        <actions>
+                            <action id="action:read">allow</action>
+                            <action id="action:bulk read">allow</action>
+                            <action id="action:write">allow</action>
+                            <action id="action:bulk write">allow</action>
+                        </actions>
+                    </group>
+                    <group id="*">
+                        <actions>
+                            <action id="action:read">allow</action>
+                            <action id="action:bulk read">allow</action>
+                        </actions>
+                    </group>
+                </groups>
+            </profile>
+            <profile id="12713" _delta="define">
+                <name>Risk Agent</name>
+                <description>Person in charge of defining individual risks</description>
+                <groups>
+                    <group id="Portal">
+                        <actions>
+                            <action id="action:write">allow</action>
+                        </actions>
+                    </group>
+                    <group id="RiskManagement">
+                        <actions>
+                            <action id="action:read">allow</action>
+                            <action id="action:bulk read">allow</action>
+                            <action id="action:write">allow</action>
+                        </actions>
+                    </group>
+                    <group id="*">
+                        <actions>
+                            <action id="action:read">allow</action>
+                            <action id="action:bulk read">allow</action>
+                        </actions>
+                    </group>
+                </groups>
+            </profile>
+        </profiles>
+    </user_rights>
+    <module_designs>
+        <module_design id="itop-portal" _delta="must_exist">
+            <classes>
+                <class id="ApplicationSolution" _delta="define">
+                    <scopes>
+                        <scope id="all">
+                            <oql_view><![CDATA[SELECT ApplicationSolution AS a JOIN lnkContactToFunctionalCI AS l ON l.functionalci_id = a.id JOIN Contact AS c ON l.contact_id = c.id WHERE c.id=:current_contact_id]]></oql_view>
+                            <!-- <oql_edit><![CDATA[SELECT ApplicationSolution AS a]]></oql_edit> -->
+                        </scope>
+                        <scope id="portal-power-user">
+                            <oql_view><![CDATA[SELECT ApplicationSolution AS a WHERE a.org_id = :current_contact->org_id]]></oql_view>
+                            <!-- <oql_edit><![CDATA[SELECT ApplicationSolution AS a]]></oql_edit> -->
+                            <allowed_profiles>
+                                <allowed_profile id="Portal power user" />
+                            </allowed_profiles>
+                        </scope>
+                    </scopes>
+                </class>
+                <class id="BusinessProcess" _delta="define">
+                    <scopes>
+                        <scope id="all">
+                            <oql_view><![CDATA[SELECT BusinessProcess AS b JOIN lnkContactToFunctionalCI AS l ON l.functionalci_id = b.id JOIN Contact AS c ON l.contact_id = c.id WHERE c.id=:current_contact_id]]></oql_view>
+                            <!-- <oql_edit><![CDATA[SELECT BusinessProcess AS b]]></oql_edit> -->
+                        </scope>
+                        <scope id="portal-power-user">
+                            <oql_view><![CDATA[SELECT BusinessProcess AS b WHERE b.org_id = :current_contact->org_id]]></oql_view>
+                            <!-- <oql_edit><![CDATA[SELECT BusinessProcess AS b]]></oql_edit> -->
+                            <allowed_profiles>
+                                <allowed_profile id="Portal power user" />
+                            </allowed_profiles>
+                        </scope>
+                    </scopes>
+                </class>
+            </classes>
+            <forms>
+                <form id="applicationsolution-view" _delta="define">
+                    <class>ApplicationSolution</class>
+                    <fields />
+                    <twig>
+                        <div class="row">
+                            <div class="col-sm-7">
+                                <fieldset>
+                                    <legend>{{'Server:baseinfo'|dict_s}}</legend>
+                                    <div class="col-sm-6">
+                                        <div class="form_field" data-field-id="name" data-field-flags="read_only" />
+                                        <div class="form_field" data-field-id="org_id" data-field-flags="read_only" />
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form_field" data-field-id="status" data-field-flags="read_only" />
+                                        <div class="form_field" data-field-id="system_landscape" data-field-flags="read_only" />
+                                        <div class="form_field" data-field-id="business_criticity" data-field-flags="read_only" />
+                                        <div class="form_field" data-field-id="move2production" data-field-flags="read_only" />
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form_field" data-field-id="description" data-field-flags="read_only" />
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="col-sm-5">
+                                <fieldset>
+                                    <legend>{{'FunctionalCI:RiskManagement'|dict_s}}</legend>
+                                    <div class="col-sm-6">
+                                        <div class="form_field" data-field-id="rm_confidentiality" data-field-flags="read_only" />
+                                        <div class="form_field" data-field-id="rm_integrity" data-field-flags="read_only" />
+                                        <div class="form_field" data-field-id="rm_availability" data-field-flags="read_only" />
+                                        <div class="form_field" data-field-id="rm_authenticity" data-field-flags="read_only" />
+                                        <div class="form_field" data-field-id="rm_nonrepudiation" data-field-flags="read_only" />
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form_field" data-field-id="bcm_rpo" data-field-flags="read_only" />
+                                        <div class="form_field" data-field-id="bcm_rto" data-field-flags="read_only" />
+                                        <div class="form_field" data-field-id="bcm_mtd" data-field-flags="read_only" />
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="form_field" data-field-id="contacts_list" />
+                            <div class="form_field" data-field-id="functionalcis_list" />
+                        </div>
+                    </twig>
+                    <modes>
+                        <mode id="view" />
+                    </modes>
+                </form>
+                <form id="businessprocess-view" _delta="define">
+                    <class>BusinessProcess</class>
+                    <fields />
+                    <twig>
+                        <div class="row">
+                            <div class="col-sm-7">
+                                <fieldset>
+                                    <legend>{{'Server:baseinfo'|dict_s}}</legend>
+                                    <div class="col-sm-6">
+                                        <div class="form_field" data-field-id="name" data-field-flags="read_only" />
+                                        <div class="form_field" data-field-id="org_id" data-field-flags="read_only" />
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form_field" data-field-id="status" data-field-flags="read_only" />
+                                        <div class="form_field" data-field-id="business_criticity" data-field-flags="read_only" />
+                                        <div class="form_field" data-field-id="move2production" data-field-flags="read_only" />
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form_field" data-field-id="description" data-field-flags="read_only" />
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="col-sm-5">
+                                <fieldset>
+                                    <legend>{{'FunctionalCI:RiskManagement'|dict_s}}</legend>
+                                    <div class="col-sm-6">
+                                        <div class="form_field" data-field-id="rm_confidentiality" data-field-flags="read_only" />
+                                        <div class="form_field" data-field-id="rm_integrity" data-field-flags="read_only" />
+                                        <div class="form_field" data-field-id="rm_availability" data-field-flags="read_only" />
+                                        <div class="form_field" data-field-id="rm_authenticity" data-field-flags="read_only" />
+                                        <div class="form_field" data-field-id="rm_nonrepudiation" data-field-flags="read_only" />
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form_field" data-field-id="bcm_rpo" data-field-flags="read_only" />
+                                        <div class="form_field" data-field-id="bcm_rto" data-field-flags="read_only" />
+                                        <div class="form_field" data-field-id="bcm_mtd" data-field-flags="read_only" />
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="form_field" data-field-id="contacts_list" />
+                            <div class="form_field" data-field-id="applicationsolution_list" />
+                        </div>
+                    </twig>
+                    <modes>
+                        <mode id="view" />
+                    </modes>
+                </form>
+            </forms>
+        </module_design>
+    </module_designs>
 </itop_design>

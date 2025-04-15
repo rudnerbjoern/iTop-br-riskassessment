@@ -85,12 +85,11 @@ The extension is compatible with the following versions of iTop:
 This extension has been successfully tested on iTop versions:
 
 - 2.7.10
-- 3.1.1
-- 3.2.0-2
+- 3.2.1
 
 ## License & Attribution
 
-This project is licensed under the GPL-3.0 License © 2021-2024 Björn Rudner.
+This project is licensed under the GPL-3.0 License © 2021-2025 Björn Rudner.
 
 For details, refer to the [LICENSE](https://github.com/rudnerbjoern/iTop-br-riskassessment/blob/main/LICENSE) file.
 

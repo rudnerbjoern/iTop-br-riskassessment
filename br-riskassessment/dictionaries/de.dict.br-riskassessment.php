@@ -12,7 +12,7 @@
 // Risk levels
 //
 Dict::Add('DE DE', 'German', 'Deutsch', array(
-    'Server:riskmanagement' => 'Risikomanagement',
+    'FunctionalCI:RiskManagement' => 'Risikomanagement',
     'Class:FunctionalCI/Attribute:rm_confidentiality' => 'Vertraulichkeit',
     'Class:FunctionalCI/Attribute:rm_confidentiality+' => 'Welchen Schutzbedarf an Vertraulichkeit hat das Objekt?',
     'Class:FunctionalCI/Attribute:rm_confidentiality/Value:none' => 'keine',

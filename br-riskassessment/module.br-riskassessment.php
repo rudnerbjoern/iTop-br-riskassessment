@@ -1,16 +1,16 @@
 <?php
 
 /**
- * @copyright   Copyright (C) 2022-2024 Björn Rudner
+ * @copyright   Copyright (C) 2022-2025 Björn Rudner
  * @license     https://www.gnu.org/licenses/gpl-3.0.en.html
- * @version     2024-10-25
+ * @version     2025-04-15
  *
  * iTop module definition file
  */
 
 SetupWebPage::AddModule(
     __FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-    'br-riskassessment/3.1.8',
+    'br-riskassessment/3.2.0',
     array(
         // Identification
         //
@@ -201,6 +201,57 @@ if (!class_exists('RiskAssessmentInstaller')) {
                             SetupLog::Info('|  |- AuditRule "' . $aAuditRule['name'] . '" created.');
                         } catch (Exception $oException) {
                             SetupLog::Info('|  |- Could not create AuditRule "' . $aAuditRule['name'] . '". (Error: ' . $oException->getMessage() . ')');
+                        }
+                    }
+                }
+            }
+
+            // Introduce AuditDomain in Version 3.2.0
+            if (version_compare($sPreviousVersion, '3.2.0', '<')) {
+                SetupLog::Info("|- Installing Risk Assessment from '$sPreviousVersion' to '$sCurrentVersion'. Updating AuditDomain and lnkAuditCategoryToAuditDomain ...");
+
+                $iAuditDomainId = 0;
+                $iAuditCategoryId = 0;
+
+                if (MetaModel::IsValidClass('AuditDomain')) {
+                    // First, create audit category for Server mismatch
+                    $oSearch = DBObjectSearch::FromOQL('SELECT AuditDomain WHERE name = "Risk Management"');
+                    $oSet = new DBObjectSet($oSearch);
+                    $oAuditDomain = $oSet->Fetch();
+
+                    if ($oAuditDomain === null) {
+                        try {
+                            $oAuditDomain = MetaModel::NewObject('AuditDomain', array(
+                                'name' => 'Risk Management',
+                                'description' => 'Audit Risk Management defined in the CMDB',
+                            ));
+                            $oAuditDomain->DBWrite();
+                            SetupLog::Info('|  |- AuditDomain "Risk Management" created.');
+                        } catch (Exception $oException) {
+                            SetupLog::Info('|  |- Could not create AuditDomain. (Error: ' . $oException->getMessage() . ')');
+                        }
+                    } else {
+                        SetupLog::Info('|  |- AuditDomain "Risk Management" already existing! We will use it!');
+                    }
+
+                    // Link AuditDomain with AuditCategory
+                    $oSearch = DBObjectSearch::FromOQL('SELECT AuditCategory WHERE name = "Risk Management Mismatch"');
+                    $oSet = new DBObjectSet($oSearch);
+                    $oAuditCategory = $oSet->Fetch();
+
+                    $iAuditDomainId = ($oAuditDomain !== null) ? $oAuditDomain->GetKey() : 0;
+                    $iAuditCategoryId = ($oAuditCategory !== null) ? $oAuditCategory->GetKey() : 0;
+
+                    if ($iAuditDomainId > 0 && $iAuditCategoryId > 0) {
+                        try {
+                            $oAuditLink = MetaModel::NewObject('lnkAuditCategoryToAuditDomain', array(
+                                'domain_id' => $iAuditDomainId,
+                                'category_id' => $iAuditCategoryId,
+                            ));
+                            $oAuditLink->DBWrite();
+                            SetupLog::Info('|  |- AuditLink created.');
+                        } catch (Exception $oException) {
+                            SetupLog::Info('|  |- Could not create AuditLink. (Error: ' . $oException->getMessage() . ')');
                         }
                     }
                 }

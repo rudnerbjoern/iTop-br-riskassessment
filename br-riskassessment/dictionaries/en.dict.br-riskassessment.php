@@ -12,7 +12,7 @@
 // Risk management
 //
 Dict::Add('EN US', 'English', 'English', array(
-    'Server:riskmanagement' => 'Risk management',
+    'FunctionalCI:RiskManagement' => 'Risk management',
     'Class:FunctionalCI/Attribute:rm_confidentiality' => 'Confidentiality',
     'Class:FunctionalCI/Attribute:rm_confidentiality+' => 'What level of confidentiality protection is required for the object?',
     'Class:FunctionalCI/Attribute:rm_confidentiality/Value:low' => 'low',
