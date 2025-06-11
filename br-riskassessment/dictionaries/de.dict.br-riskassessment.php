@@ -11,6 +11,7 @@
 //
 // Risk levels
 //
+/** @disregard P1009 Undefined type Dict */
 Dict::Add('DE DE', 'German', 'Deutsch', array(
     'FunctionalCI:RiskManagement' => 'Risikomanagement',
     'Class:FunctionalCI/Attribute:rm_confidentiality' => 'Vertraulichkeit',
