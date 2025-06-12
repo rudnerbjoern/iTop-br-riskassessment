@@ -3,7 +3,7 @@
 /**
  * @copyright   Copyright (C) 2022-2025 Björn Rudner
  * @license     https://www.gnu.org/licenses/gpl-3.0.en.html
- * @version     2025-04-15
+ * @version     2025-06-12
  *
  * iTop module definition file
  */
@@ -21,7 +21,7 @@ SetupWebPage::AddModule(
         // Setup
         //
         'dependencies' => array(
-            'itop-config-mgmt/3.1.0',
+            'itop-config-mgmt/3.2.0',
         ),
         'mandatory' => false,
         'visible' => true,

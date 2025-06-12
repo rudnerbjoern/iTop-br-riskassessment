@@ -80,7 +80,7 @@ Key BCM metrics to aid in recovery planning:
 The extension is compatible with the following versions of iTop:
 
 - **iTop 2.7 and 3.1**: [2.7 branch](https://github.com/rudnerbjoern/iTop-br-riskassessment/tree/itop/2.7)
-- **iTop 3.1 and above**: [Main branch](https://github.com/rudnerbjoern/iTop-br-riskassessment/tree/main)
+- **iTop 3.2 and above**: [Main branch](https://github.com/rudnerbjoern/iTop-br-riskassessment/tree/main)
 
 This extension has been successfully tested on iTop versions:
 
