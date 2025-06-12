@@ -19,13 +19,13 @@
         <![CDATA[3.2.0]]>
     </version>
     <release_date>
-        <![CDATA[2025-04-15]]>
+        <![CDATA[2025-06-12]]>
     </release_date>
     <version_description>
         <![CDATA[]]>
     </version_description>
     <itop_version_min>
-        <![CDATA[3.1.0]]>
+        <![CDATA[3.2.0]]>
     </itop_version_min>
     <status>stable</status>
     <mandatory>false</mandatory>
