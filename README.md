@@ -87,9 +87,13 @@ This extension has been successfully tested on iTop versions:
 - 2.7.10
 - 3.2.1
 
+## Translations
+
+Special thanks to [Konstantin Nikulin](https://github.com/apollo2k4) for providing the Russian translation.
+
 ## License & Attribution
 
-This project is licensed under the GPL-3.0 License © 2021-2025 Björn Rudner.
+This project is licensed under the GPL-3.0 License © 2021-2026 Björn Rudner.
 
 For details, refer to the [LICENSE](https://github.com/rudnerbjoern/iTop-br-riskassessment/blob/main/LICENSE) file.
 
