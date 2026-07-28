@@ -11,6 +11,7 @@
         "intval",
         "isset",
         "nonrepudiation",
+        "Rudner",
         "veryhigh"
     ],
     "editor.formatOnSave": true,
