@@ -1,0 +1,57 @@
+name: PR labeler
+
+on:
+  pull_request_target:
+    branches:
+      - main
+    types: [opened, reopened, synchronize, edited, ready_for_review]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  label:
+    name: Label PR by branch prefix
+    runs-on: ubuntu-26.04
+    timeout-minutes: 5
+    steps:
+      # Only read event metadata; never check out or execute PR code here.
+      - name: Apply matching existing label
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        shell: python
+        run: |
+          import json
+          import os
+          from pathlib import Path
+          import subprocess
+
+          event = json.loads(Path(os.environ['GITHUB_EVENT_PATH']).read_text())
+          pr = event['pull_request']
+          prefix = pr['head']['ref'].partition('/')[0]
+          labels_by_prefix = {
+              'feat': 'enhancement',
+              'fix': 'bug',
+              'doc': 'documentation',
+          }
+          label = labels_by_prefix.get(prefix) if '/' in pr['head']['ref'] else None
+          if label is None:
+              print('No matching label for this branch prefix.')
+              raise SystemExit(0)
+
+          repo = os.environ['GH_REPO']
+          pages = json.loads(subprocess.check_output(
+              ['gh', 'api', '--paginate', '--slurp', f'repos/{repo}/labels'],
+              text=True,
+          ))
+          if not any(item['name'] == label for page in pages for item in page):
+              print(f'Label {label} does not exist; leaving labels unchanged.')
+              raise SystemExit(0)
+
+          # Adding a label is idempotent and preserves all other PR labels.
+          subprocess.run(
+              ['gh', 'api', '--method', 'POST',
+               f'repos/{repo}/issues/{pr["number"]}/labels', '--input', '-'],
+              input=json.dumps({'labels': [label]}), text=True, check=True,
+          )

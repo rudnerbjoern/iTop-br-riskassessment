@@ -1,0 +1,24 @@
+# Normalize text files and use LF in the working tree.
+* text=auto eol=lf
+
+# Extension source, metadata, and project documentation.
+*.php text diff=php
+*.xml text
+*.md text
+*.json text
+*.yml text
+*.yaml text
+LICENSE text
+.editorconfig text
+.gitattributes text
+.gitignore text
+
+# Images and release archives must remain byte-for-byte unchanged.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.zip binary
+*.gz binary
+*.tar binary
