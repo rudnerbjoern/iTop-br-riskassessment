@@ -1,0 +1,173 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  select_checks:
+    name: Select PR checks
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 5
+    outputs:
+      gitleaks: ${{ steps.select.outputs.gitleaks }}
+      php_tests: ${{ steps.select.outputs.php_tests }}
+      release_metadata: ${{ steps.select.outputs.release_metadata }}
+    steps:
+      - name: Select required checks
+        id: select
+        env:
+          HEAD_BRANCH: ${{ github.head_ref }}
+        # Secret scanning is required for every PR, including documentation changes.
+        run: |
+          echo "gitleaks=true" >> "$GITHUB_OUTPUT"
+          echo "php_tests=true" >> "$GITHUB_OUTPUT"
+          if [[ "$HEAD_BRANCH" == release/* ]]; then
+            echo "release_metadata=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "release_metadata=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  gitleaks:
+    name: Gitleaks
+    needs: select_checks
+    # Pushes run independently of the PR-only selection job.
+    if: >-
+      always() && !cancelled() &&
+      (github.event_name == 'push' ||
+      (needs.select_checks.result == 'success' &&
+      needs.select_checks.outputs.gitleaks == 'true'))
+    runs-on: ubuntu-26.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Scan for secrets
+        uses: gitleaks/gitleaks-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_ENABLE_COMMENTS: 'false'
+          GITLEAKS_VERSION: '8.30.1'
+
+  php_tests:
+    name: PHP tests and XSD validation
+    needs: select_checks
+    if: >-
+      always() && !cancelled() &&
+      (github.event_name == 'push' ||
+      (needs.select_checks.result == 'success' &&
+      needs.select_checks.outputs.php_tests == 'true'))
+    runs-on: ubuntu-26.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: dom, simplexml
+          coverage: none
+          tools: none
+
+      - name: Download XML schemas
+        run: |
+          mkdir -p .tmp/schemas/3.2
+          curl --fail --silent --show-error --location --retry 3 --max-time 60 \
+            https://rudnerbjoern.github.io/iTop-schema/extension.xsd \
+            --output .tmp/schemas/extension.xsd
+          curl --fail --silent --show-error --location --retry 3 --max-time 60 \
+            https://rudnerbjoern.github.io/iTop-schema/3.2/itop_design.xsd \
+            --output .tmp/schemas/3.2/itop_design.xsd
+
+      - name: Run PHP tests and schema validation
+        run: php tests/run.php
+
+  release_metadata:
+    name: Validate release branch
+    needs: select_checks
+    if: needs.select_checks.outputs.release_metadata == 'true'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Match release branch to project version
+        env:
+          RELEASE_BRANCH: ${{ github.head_ref }}
+        shell: python
+        run: |
+          import os
+          from pathlib import Path
+          import re
+          import xml.etree.ElementTree as ET
+
+          match = re.fullmatch(r'release/((?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*))', os.environ['RELEASE_BRANCH'])
+          if not match:
+              raise SystemExit('Release branches must use release/X.Y.Z without leading zeros')
+          version = match.group(1)
+          root = ET.parse('extension.xml').getroot()
+          module = Path('br-riskassessment/module.br-riskassessment.php').read_text()
+          versions = re.findall(r"'br-riskassessment/([^']+)'", module)
+          if root.findtext('version', '').strip() != version or versions != [version]:
+              raise SystemExit('Release branch, extension and module versions must match')
+          print(f'Release branch matches project version {version}')
+
+  pr_result:
+    name: PR checks
+    needs: [select_checks, gitleaks, php_tests, release_metadata]
+    if: always() && github.event_name == 'pull_request' && github.base_ref == 'main'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 5
+    steps:
+      - name: Verify selected checks
+        env:
+          SELECTION_RESULT: ${{ needs.select_checks.result }}
+          GITLEAKS_SELECTED: ${{ needs.select_checks.outputs.gitleaks }}
+          GITLEAKS_RESULT: ${{ needs.gitleaks.result }}
+          PHP_TESTS_SELECTED: ${{ needs.select_checks.outputs.php_tests }}
+          PHP_TESTS_RESULT: ${{ needs.php_tests.result }}
+          RELEASE_METADATA_SELECTED: ${{ needs.select_checks.outputs.release_metadata }}
+          RELEASE_METADATA_RESULT: ${{ needs.release_metadata.result }}
+        run: |
+          if [ "$SELECTION_RESULT" != "success" ]; then
+            echo "Check selection did not succeed."
+            exit 1
+          fi
+
+          for check in GITLEAKS PHP_TESTS RELEASE_METADATA; do
+            selected="${check}_SELECTED"
+            result="${check}_RESULT"
+            case "${!selected}" in
+              true)
+                if [ "${!result}" != "success" ]; then
+                  echo "Required $check check did not succeed: ${!result}"
+                  exit 1
+                fi
+                ;;
+              false)
+                echo "$check was not selected for this run."
+                ;;
+              *)
+                echo "Invalid $check selection."
+                exit 1
+                ;;
+            esac
+          done

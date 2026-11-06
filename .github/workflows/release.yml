@@ -1,0 +1,208 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    types: [closed]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: release-${{ github.event.pull_request.merge_commit_sha || github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    name: Scan and validate release
+    if: >-
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true &&
+      github.event.pull_request.base.ref == 'main' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      startsWith(github.event.pull_request.head.ref, 'release/'))
+    runs-on: ubuntu-26.04
+    timeout-minutes: 10
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+      sha: ${{ steps.version.outputs.sha }}
+    steps:
+      - name: Check out release commit
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Scan for secrets
+        uses: gitleaks/gitleaks-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_ENABLE_COMMENTS: 'false'
+          GITLEAKS_VERSION: '8.30.1'
+
+      - name: Verify successful PR completion check
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        shell: python
+        run: |
+          import json
+          import os
+          from pathlib import Path
+          import subprocess
+
+          event = json.loads(Path(os.environ['GITHUB_EVENT_PATH']).read_text())
+          pr = event['pull_request']
+          state = json.loads(subprocess.check_output([
+              'gh', 'pr', 'view', str(pr['number']), '--repo', os.environ['GH_REPO'],
+              '--json', 'state,headRefOid,statusCheckRollup',
+          ], text=True))
+          if state['state'] != 'MERGED' or state['headRefOid'] != pr['head']['sha']:
+              raise SystemExit('PR state or head commit does not match the merged event')
+          checks = [check for check in state['statusCheckRollup']
+                    if check.get('workflowName') == 'CI' and check.get('name') == 'PR checks'
+                    and check.get('conclusion') != 'SKIPPED']
+          if not checks or any(check.get('conclusion') != 'SUCCESS' for check in checks):
+              raise SystemExit('The merged PR must have a successful CI / PR checks result')
+
+      - name: Validate release version
+        id: version
+        env:
+          RELEASE_BRANCH: ${{ github.event.pull_request.head.ref }}
+        shell: python
+        run: |
+          import os
+          from pathlib import Path
+          import re
+          import subprocess
+          import xml.etree.ElementTree as ET
+
+          root = ET.parse('extension.xml').getroot()
+          version = root.findtext('version', '').strip()
+          if not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', version):
+              raise SystemExit('Expected an extension version in X.Y.Z format')
+
+          if os.environ.get('GITHUB_EVENT_NAME') == 'pull_request':
+              branch = os.environ['RELEASE_BRANCH']
+              if not re.fullmatch(r'release/((?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*))', branch):
+                  raise SystemExit('Expected a release/X.Y.Z branch')
+              if branch != f'release/{version}':
+                  raise SystemExit('Release branch must match the project version')
+
+          module = Path('br-riskassessment/module.br-riskassessment.php').read_text()
+          versions = re.findall(r"'br-riskassessment/([^']+)'", module)
+          if versions != [version]:
+              raise SystemExit('Extension and module versions must match')
+
+          tag = f'v{version}'
+          result = subprocess.run(
+              ['git', 'show-ref', '--verify', '--quiet', f'refs/tags/{tag}']
+          )
+          if result.returncode == 0:
+              tagged_commit = subprocess.check_output(
+                  ['git', 'rev-parse', f'{tag}^{{commit}}'], text=True
+              ).strip()
+              release_commit = subprocess.check_output(
+                  ['git', 'rev-parse', 'HEAD'], text=True
+              ).strip()
+              if tagged_commit != release_commit:
+                  raise SystemExit(f'Tag {tag} points to a different commit')
+          elif result.returncode != 1:
+              raise SystemExit('Could not check existing tags')
+
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write(f'tag={tag}\n')
+              output.write('sha=' + subprocess.check_output(
+                  ['git', 'rev-parse', 'HEAD'], text=True
+              ).strip() + '\n')
+
+  release:
+    name: Create tag and release
+    needs: prepare
+    runs-on: ubuntu-26.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Check out release commit
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.prepare.outputs.sha }}
+          persist-credentials: false
+
+      - name: Build release package
+        env:
+          RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
+        run: |
+          mkdir -p .tmp
+          git archive --format=zip \
+            --prefix=br-riskassessment/ \
+            --output=".tmp/br-riskassessment-${RELEASE_TAG}.zip" \
+            HEAD -- \
+            br-riskassessment extension.xml LICENSE
+          cd .tmp
+          sha256sum "br-riskassessment-${RELEASE_TAG}.zip" \
+            > "br-riskassessment-${RELEASE_TAG}.zip.sha256"
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
+          RELEASE_SHA: ${{ needs.prepare.outputs.sha }}
+        run: |
+          package=".tmp/br-riskassessment-${RELEASE_TAG}.zip"
+          checksum="${package}.sha256"
+          # Listing releases also finds drafts left behind by interrupted uploads.
+          gh api --paginate --slurp "repos/${GH_REPO}/releases?per_page=100" \
+            > .tmp/releases.json
+          jq -c --arg tag "$RELEASE_TAG" \
+            '[.[][] | select(.tag_name == $tag)] |
+            if length > 1 then error("Multiple releases for the same tag")
+            else .[0] // empty end' .tmp/releases.json > .tmp/release.json
+
+          if [ -s .tmp/release.json ]; then
+            is_draft=$(jq -r '.draft' .tmp/release.json)
+            if [ "$is_draft" = "true" ]; then
+              draft_target=$(jq -r '.target_commitish' .tmp/release.json)
+              if [ "$draft_target" != "$RELEASE_SHA" ]; then
+                echo "Release draft targets a different or ambiguous commit." >&2
+                exit 1
+              fi
+            fi
+            for asset in "$package" "$checksum"; do
+              asset_name=$(basename "$asset")
+              asset_state=$(jq -r --arg name "$asset_name" \
+                '.assets[] | select(.name == $name) | .state' .tmp/release.json)
+              if [ "$asset_state" = "uploaded" ]; then
+                # Never publish a checksum for a different existing package.
+                mkdir -p .tmp/existing-assets
+                gh release download "$RELEASE_TAG" --pattern "$asset_name" \
+                  --dir .tmp/existing-assets --clobber
+                if ! cmp --silent "$asset" ".tmp/existing-assets/$asset_name"; then
+                  echo "Existing release asset differs: $asset_name" >&2
+                  exit 1
+                fi
+                echo "Release asset is already uploaded and matches: $asset_name"
+              elif [ -n "$asset_state" ]; then
+                # Replace an incomplete upload left behind by a failed attempt.
+                gh release upload "$RELEASE_TAG" "$asset" --clobber
+              else
+                gh release upload "$RELEASE_TAG" "$asset"
+              fi
+            done
+            if [ "$is_draft" = "true" ]; then
+              gh release edit "$RELEASE_TAG" --draft=false
+            fi
+          else
+            gh release create "$RELEASE_TAG" "$package" "$checksum" \
+              --target "$RELEASE_SHA" \
+              --title "$RELEASE_TAG" \
+              --notes-file .github/release-notes.md \
+              --generate-notes
+          fi

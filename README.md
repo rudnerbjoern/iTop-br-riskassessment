@@ -87,6 +87,16 @@ This extension has been successfully tested on iTop versions:
 - 2.7.10
 - 3.2.1
 
+## Development and releases
+
+- [Local PHP tests and XML schema validation](tests/README.md)
+- [Release preparation and publication](scripts/README.md)
+
+CI runs secret scanning, PHP tests, and XSD validation on every push and every
+pull request targeting `main`. Merging a same-repository `release/X.Y.Z` pull request automatically
+publishes the matching tag, extension ZIP, checksum, and GitHub Release after
+verifying the required PR checks.
+
 ## Translations
 
 Special thanks to [Konstantin Nikulin](https://github.com/apollo2k4) for providing the Russian translation.

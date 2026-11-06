@@ -1,0 +1,57 @@
+# Operating system files
+.DS_Store
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+Desktop.ini
+Icon?
+Thumbs.db
+
+# Editor-local files
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+*.swp
+*.swo
+*~
+
+# Local Claude Code settings
+.claude/settings.local.json
+
+# Temporary files and logs
+.cache/
+.npm/
+.tmp/
+.temp/
+node_modules/
+tmp/
+*.log
+gitleaks-report.json
+semgrep-report.json
+
+# Local environment and secret files
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+config-itop.php
+cron.params
+
+# iTop packages, backups, and database dumps
+backups/
+*.sql
+*.sql.gz
+*.tar
+*.tar.gz
+*.tgz
+*.zip
