@@ -16,7 +16,7 @@ $tests = [
         [$updatedManifest, $updatedModule] = prepareReleaseContents($manifest, $module, $next, '2028-02-29');
         $xml = simplexml_load_string($updatedManifest);
         if ((string) $xml->version !== $next || (string) $xml->release_date !== '2028-02-29'
-            || $updatedModule !== prepareReleaseHeader(str_replace("'br-riskassessment/$current'", "'br-riskassessment/$next'", $module), '2028-02-29')
+            || $updatedModule !== str_replace("'br-riskassessment/$current'", "'br-riskassessment/$next'", $module)
             || preg_replace('~<(version|release_date)>.*?</\1>~s', '', $updatedManifest)
                 !== preg_replace('~<(version|release_date)>.*?</\1>~s', '', $manifest)) {
             throw new RuntimeException('Unexpected release metadata or unrelated edits.');
@@ -24,43 +24,16 @@ $tests = [
     },
 ];
 
-$tests['update all PHP release headers and preserve compatibility and migration versions'] = static function () use ($manifest, $module, $next): void {
-    $modulePath = 'br-riskassessment/module.br-riskassessment.php';
-    $files = ['extension.xml' => $manifest, $modulePath => $module];
-    foreach (glob(__DIR__ . '/../br-riskassessment/dictionaries/*.dict.br-riskassessment.php') as $path) {
-        $files['br-riskassessment/dictionaries/' . basename($path)] = file_get_contents($path);
-    }
-    $updated = prepareReleaseFiles($files, $next, '2028-02-29');
-    foreach ($files as $path => $content) {
-        if ($path === 'extension.xml') {
-            continue;
-        }
-        $expected = preg_replace('~(@version[ \t]+)\d{4}-\d{2}-\d{2}~', '${1}2028-02-29', $content);
-        if ($path === $modulePath) {
-            $expected = str_replace("'br-riskassessment/" . trim((string) simplexml_load_string($manifest)->version) . "'", "'br-riskassessment/$next'", $expected);
-        }
-        if ($updated[$path] !== $expected) {
-            throw new RuntimeException('Unrelated content changed or release header was not updated: ' . $path);
-        }
-    }
-    $xml = simplexml_load_string($updated['extension.xml']);
-    if ((string) $xml->itop_version_min !== (string) simplexml_load_string($manifest)->itop_version_min) {
+$tests['preserve compatibility and historical migration versions'] = static function () use ($manifest, $module, $next): void {
+    [$updatedManifest, $updatedModule] = prepareReleaseContents($manifest, $module, $next, '2028-02-29');
+    if ((string) simplexml_load_string($updatedManifest)->itop_version_min
+        !== (string) simplexml_load_string($manifest)->itop_version_min) {
         throw new RuntimeException('The minimum iTop version must remain unchanged.');
     }
-};
-
-$tests['reject missing or ambiguous PHP release headers before writing'] = static function () use ($manifest, $module, $next): void {
-    foreach (["<?php\n", "/**\n * @version 2026-01-01\n * @version 2026-01-02\n */\n"] as $header) {
-        try {
-            prepareReleaseFiles([
-                'extension.xml' => $manifest,
-                'br-riskassessment/module.br-riskassessment.php' => $module,
-                'br-riskassessment/dictionaries/example.dict.br-riskassessment.php' => $header,
-            ], $next, '2028-02-29');
-        } catch (RuntimeException $error) {
-            continue;
-        }
-        throw new RuntimeException('Invalid dictionary release header was accepted.');
+    preg_match_all('/version_compare\([^;]+/', $module, $before);
+    preg_match_all('/version_compare\([^;]+/', $updatedModule, $after);
+    if ($before !== $after) {
+        throw new RuntimeException('Historical migration versions must remain unchanged.');
     }
 };
 

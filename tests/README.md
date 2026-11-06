@@ -41,8 +41,7 @@ event data, and dictionary formatting. They cover RTO/MTD ordering, equal values
 empty values, numeric strings, and validation only when RTO or MTD changes.
 Add validation cases to `bcm-validation.php`. Release preparation tests check
 metadata updates and rejection of invalid versions, dates, or inconsistent input.
-They also check date-based PHP headers across the module and dictionaries while
-preserving dependency and historical migration versions.
+They also check that compatibility and historical migration versions remain unchanged.
 
 `module.php` loads the real module with small iTop substitutes. It checks module
 registration, initial audit setup, version-gated upgrades, category/domain links,

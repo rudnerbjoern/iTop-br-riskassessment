@@ -2,22 +2,6 @@
 
 declare(strict_types=1);
 
-/** Update the date-based @version used by this project's PHP headers. */
-function prepareReleaseHeader(string $content, string $date): string
-{
-    $updated = preg_replace_callback(
-        '~(^[ \t]*\*[ \t]+@version[ \t]+)\d{4}-\d{2}-\d{2}([ \t]*\r?$)~m',
-        static fn (array $match): string => $match[1] . $date . $match[2],
-        $content,
-        -1,
-        $count
-    );
-    if ($updated === null || $count !== 1) {
-        throw new RuntimeException('Expected exactly one date-based @version header.');
-    }
-    return $updated;
-}
-
 /** Validate all inputs before producing either updated file. */
 function prepareReleaseContents(string $manifest, string $module, string $version, string $date): array
 {
@@ -68,21 +52,7 @@ function prepareReleaseContents(string $manifest, string $module, string $versio
         static fn (): string => "'br-riskassessment/$version'",
         $module
     );
-    return [$manifest, prepareReleaseHeader($module, $date)];
-}
-
-/** Prepare all release metadata before writing any project file. */
-function prepareReleaseFiles(array $files, string $version, string $date): array
-{
-    $modulePath = 'br-riskassessment/module.br-riskassessment.php';
-    [$manifest, $module] = prepareReleaseContents($files['extension.xml'], $files[$modulePath], $version, $date);
-    $updated = ['extension.xml' => $manifest, $modulePath => $module];
-    foreach ($files as $path => $content) {
-        if (!array_key_exists($path, $updated)) {
-            $updated[$path] = prepareReleaseHeader($content, $date);
-        }
-    }
-    return $updated;
+    return [$manifest, $module];
 }
 
 if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
@@ -93,9 +63,6 @@ if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
         $date = $argv[2] ?? (new DateTimeImmutable('now', new DateTimeZone('Europe/Berlin')))->format('Y-m-d');
         $root = dirname(__DIR__);
         $paths = ['extension.xml', 'br-riskassessment/module.br-riskassessment.php'];
-        foreach (glob($root . '/br-riskassessment/dictionaries/*.dict.br-riskassessment.php') as $dictionary) {
-            $paths[] = 'br-riskassessment/dictionaries/' . basename($dictionary);
-        }
         $originals = [];
         foreach ($paths as $path) {
             $content = file_get_contents($root . '/' . $path);
@@ -104,7 +71,9 @@ if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
             }
             $originals[$path] = $content;
         }
-        $updated = prepareReleaseFiles($originals, $argv[1], $date);
+        $updated = array_combine($paths, prepareReleaseContents(
+            $originals[$paths[0]], $originals[$paths[1]], $argv[1], $date
+        ));
         try {
             foreach ($updated as $path => $content) {
                 if (file_put_contents($root . '/' . $path, $content, LOCK_EX) !== strlen($content)) {
