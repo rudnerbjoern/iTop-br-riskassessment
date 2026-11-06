@@ -8,10 +8,9 @@ php scripts/prepare-release.php 3.2.3
 ```
 
 This updates the extension manifest version, module registration version, and
-manifest release date together. It also updates the date-based `@version` headers
-in the module and all `*.dict.br-riskassessment.php` dictionaries, then runs
-`tests/run.php`. The default date uses Europe/Berlin. Supply a date explicitly
-when needed:
+manifest release date together, then runs `tests/run.php`. Dictionary files are
+not changed. The default date uses Europe/Berlin. Supply a date explicitly when
+needed:
 
 ```sh
 php scripts/prepare-release.php 3.2.3 2026-11-06
@@ -19,8 +18,8 @@ php scripts/prepare-release.php 3.2.3 2026-11-06
 
 The version must be newer than the existing version and use `X.Y.Z` format.
 The current manifest and module versions must match. All inputs and file contents
-are checked before writing. Missing or ambiguous date-based PHP headers are
-rejected. A write failure triggers an attempt to restore all originals; this is
+are checked before writing. A write failure triggers an attempt to restore both
+originals; this is
 not a transaction across filesystem failures. Existing formatting outside the
 release metadata is preserved. The minimum iTop version, module dependency
 versions, XML design version, historical migration thresholds, and README's
