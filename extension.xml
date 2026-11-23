@@ -21,7 +21,7 @@
     </modules>
     <release_date><![CDATA[2026-11-23]]></release_date>
     <version_description>
-        <![CDATA[Requires iTop 3.3.0 or later. Integrates risk and recovery fields into the native detail layouts, makes repeated audit setup safe, and corrects the non-repudiation audit rule while preserving customized queries. An optional bridge displays System Landscape on the application solution portal form.]]>
+        <![CDATA[Requires iTop 3.3.0 or later. The five supported CI forms display protection and recovery objectives in the native detail layout. Setup reuses existing audit objects and repairs the original non-repudiation query during upgrades while preserving administrator edits. When System Landscape 3.2.2 or later is selected, an optional bridge adds its read-only field to the application solution portal form.]]>
     </version_description>
     <itop_version_min>3.3.0</itop_version_min>
     <status>stable</status>

@@ -18,7 +18,17 @@ where the documented requirements diverge before planning a recovery exercise.
 | 3.2.x             | A 3.2.x release or the [itop/3.2 maintenance branch][itop-32] |
 | 2.7 or 3.1        | The [itop/2.7 branch][itop-27]                                |
 
-Previous versions of the extension were tested on iTop 2.7.10 and 3.2.1.
+Risk Assessment 3.3.0 was tested on iTop 3.3.0-1, both on its own and with
+System Landscape 3.2.2. Previous versions of the extension were tested on
+iTop 2.7.10 and 3.2.1.
+
+### Upgrade from Risk Assessment 3.2.x
+
+Once your iTop installation is on 3.3.0 or later, extract the new bundle into
+`extensions/` and rerun iTop Setup. Setup recompiles the forms and corrects
+the original non-repudiation audit query, including duplicate copies. Queries
+you have edited are preserved. If you use System Landscape, select it alongside
+Risk Assessment so Setup can enable the portal bridge.
 
 ## Install and record your first assessment
 
