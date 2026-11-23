@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<itop_design version="3.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://rudnerbjoern.github.io/iTop-schema/3.3/itop_design.xsd">
+    <!-- Copyright (C) 2026 Björn Rudner. Licensed under the GNU GPL v3. -->
+    <module_designs>
+        <module_design id="itop-portal" _delta="must_exist">
+            <forms>
+                <form id="applicationsolution-view" _delta="must_exist">
+                    <twig>
+                        <div id="riskassessment-app-row" _delta="must_exist">
+                            <div id="riskassessment-app-details" _delta="must_exist">
+                                <fieldset>
+                                    <div id="riskassessment-app-classification" _delta="must_exist">
+                                        <div id="riskassessment-app-landscape" _delta="define" class="form_field" data-field-id="system_landscape" data-field-flags="read_only" />
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </twig>
+                </form>
+            </forms>
+        </module_design>
+    </module_designs>
+</itop_design>

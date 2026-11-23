@@ -70,6 +70,14 @@ jobs:
           if not checks or any(check.get('conclusion') != 'SUCCESS' for check in checks):
               raise SystemExit('The merged PR must have a successful CI / PR checks result')
 
+      - name: Set up PHP for release metadata
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: simplexml
+          coverage: none
+          tools: none
+
       - name: Validate release version
         id: version
         env:
@@ -77,27 +85,12 @@ jobs:
         shell: python
         run: |
           import os
-          from pathlib import Path
-          import re
           import subprocess
-          import xml.etree.ElementTree as ET
 
-          root = ET.parse('extension.xml').getroot()
-          version = root.findtext('version', '').strip()
-          if not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', version):
-              raise SystemExit('Expected an extension version in X.Y.Z format')
-
+          command = ['php', 'scripts/prepare-release.php', '--check']
           if os.environ.get('GITHUB_EVENT_NAME') == 'pull_request':
-              branch = os.environ['RELEASE_BRANCH']
-              if not re.fullmatch(r'release/((?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*))', branch):
-                  raise SystemExit('Expected a release/X.Y.Z branch')
-              if branch != f'release/{version}':
-                  raise SystemExit('Release branch must match the project version')
-
-          module = Path('br-riskassessment/module.br-riskassessment.php').read_text()
-          versions = re.findall(r"'br-riskassessment/([^']+)'", module)
-          if versions != [version]:
-              raise SystemExit('Extension and module versions must match')
+              command.append(os.environ['RELEASE_BRANCH'])
+          version = subprocess.check_output(command, text=True).strip()
 
           tag = f'v{version}'
           result = subprocess.run(
@@ -144,7 +137,7 @@ jobs:
             --prefix=br-riskassessment/ \
             --output=".tmp/br-riskassessment-${RELEASE_TAG}.zip" \
             HEAD -- \
-            br-riskassessment extension.xml LICENSE
+            br-riskassessment br-riskassessment-bridge-for-br-landscape extension.xml LICENSE
           cd .tmp
           sha256sum "br-riskassessment-${RELEASE_TAG}.zip" \
             > "br-riskassessment-${RELEASE_TAG}.zip.sha256"

@@ -1,37 +1,30 @@
 # Prepare a release
 
-Set up the local schemas as described in [the test instructions](../tests/README.md),
-then run from the repository root:
+1. Choose the target extension version in `X.Y.Z` format and create the
+   corresponding `release/X.Y.Z` branch.
+2. In `extension.xml`, write a user-facing summary of this release in
+   `version_description`. Set up the [local test schemas](../tests/README.md).
+3. Prepare the release from the repository root. Replace the placeholders
+   below with the target version and the intended release date.
 
-```sh
-php scripts/prepare-release.php 3.2.3
-```
+   ```text
+   php scripts/prepare-release.php X.Y.Z YYYY-MM-DD
+   ```
 
-This updates the extension manifest version, module registration version, and
-manifest release date together, then runs `tests/run.php`. Dictionary files are
-not changed. The default date uses Europe/Berlin. Supply a date explicitly when
-needed:
-
-```sh
-php scripts/prepare-release.php 3.2.3 2026-11-06
-```
-
-The version must be newer than the existing version and use `X.Y.Z` format.
-The current manifest and module versions must match. All inputs and file contents
-are checked before writing. A write failure triggers an attempt to restore both
-originals; this is
-not a transaction across filesystem failures. Existing formatting outside the
-release metadata is preserved. The minimum iTop version, module dependency
-versions, XML design version, historical migration thresholds, and README's
-tested iTop versions remain unchanged.
-
-If tests fail, the command exits unsuccessfully and retains the version edits
-for inspection. Resolve failures before publishing. The script does not stage,
-commit, push, tag, or publish anything.
-
-Use a release branch named `release/<version>`, for example `release/3.2.3`,
-for this preparation. Review the diff, commit on that branch, and open a PR
-into `main`. PR CI requires the branch version to match both project versions.
+   Omitting the date uses today's date in Europe/Berlin. If the feature branch
+   already carries the target version, rerun the same command on the release
+   branch to refresh the date. Releases on the same day can share a date.
+4. Review the manifest, both PHP module registrations, the release date and
+   summary. The script also updates the bridge dependency on the bundled base
+   module and preserves the required System Landscape version. It runs the native
+   tests. The iTop minimum is 3.3.0, the design schema is 3.3, and the required
+   Configuration Management, Enhanced Customer Portal and ITIL profiles modules
+   each require 3.3.0. These compatibility values and the installer's historical
+   migration thresholds are independent of future extension version bumps.
+5. Verify the metadata for the intended branch with
+   `php scripts/prepare-release.php --check release/X.Y.Z`. Review the test
+   results and the diff before committing and opening a release PR into `main`.
+   If tests fail, the script leaves the edits available for inspection.
 
 Merging a `release/X.Y.Z` PR from this same repository automatically starts the
 `Release` workflow. The merge is the publication approval: the workflow verifies
@@ -40,7 +33,7 @@ ZIP package, and GitHub Release. Closing an unmerged PR, merging another branch
 prefix, or merging a fork's PR does not publish a release.
 
 The ZIP contains a single top-level `br-riskassessment/` folder. Inside it,
-`extension.xml`, `LICENSE`, and the `br-riskassessment/` module folder retain their
+`extension.xml`, `LICENSE`, and the base and bridge module folders retain their
 project-relative structure. Extracting into iTop's `extensions/` directory keeps
 all package files under `extensions/br-riskassessment/`.
 

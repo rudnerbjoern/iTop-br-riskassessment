@@ -1,112 +1,97 @@
-# iTop-br-riskassessment
+# Risk Assessment for iTop
 
-[![License](https://img.shields.io/github/license/rudnerbjoern/iTop-br-riskassessment)](https://github.com/rudnerbjoern/iTop-br-riskassessment/blob/main/LICENSE)
+Record what a business process or application needs to protect, how much data it
+can afford to lose, and how quickly it must recover. Keep those requirements on
+the configuration items (CIs) your team already manages in iTop.
 
-A powerful iTop extension adding enhanced fields for documenting essential aspects of risk management and business continuity, including confidentiality, integrity, availability, authenticity, and non-repudiation, along with BCM details like RPO, RTO, and MTD.
+If your payroll application needs **high** availability and its linked server is
+rated **normal**, the built-in audit flags the server for review. You can see
+where the documented requirements diverge before planning a recovery exercise.
 
----
+![Risk management fields for protection levels and recovery objectives](Screenshots/RiskManagementFields.png)
 
-## Overview
+## Choose a version
 
-This extension introduces additional fields for comprehensive risk management documentation within iTop, specifically covering:
+| Your iTop version | Extension version                                             |
+| ----------------- | ------------------------------------------------------------- |
+| 3.3.0 or later    | Risk Assessment releases starting with 3.3.0                  |
+| 3.2.x             | A 3.2.x release or the [itop/3.2 maintenance branch][itop-32] |
+| 2.7 or 3.1        | The [itop/2.7 branch][itop-27]                                |
 
-- **Confidentiality**
-- **Integrity**
-- **Availability**
-- **Authenticity**
-- **Non-repudiation**
-- **BCM (Business Continuity Management)**:
-  - RPO (Recovery Point Objective)
-  - RTO (Recovery Time Objective)
-  - MTD (Maximum Tolerable Downtime)
+Previous versions of the extension were tested on iTop 2.7.10 and 3.2.1.
 
-![Additional fields for Risk Management](Screenshots/RiskManagementFields.png)
+## Install and record your first assessment
 
-## Field Descriptions
+1. Download the `br-riskassessment-vX.Y.Z.zip` asset for your iTop version from
+   [GitHub Releases][releases].
+2. Extract it into your iTop installation’s `extensions/` directory. The package
+   places its manifest at `extensions/br-riskassessment/extension.xml`.
+3. Run iTop Setup and select **Datamodel: Risk Assessment**. The extension
+   requires iTop Configuration Management, Enhanced Customer Portal and the standard
+   ITIL profiles, each at version 3.3.0 or later.
+4. In the iTop console, open an application solution or business process, choose
+   **Edit**, and fill in the **Risk management** section. Save the record.
 
-### Confidentiality
+Servers and network devices have the same section. Installing the virtualization
+module also makes it available on virtual machines. On all five object types you can
+also search by any of the five protection fields.
 
-Defines the level of confidentiality requirements:
+## What to record
 
-- **None**
-- **Normal**
-- **High**
-- **Very High**
+| Protection field                         | Available levels              |
+| ---------------------------------------- | ----------------------------- |
+| Confidentiality, integrity, availability | None, normal, high, very high |
+| Authenticity, non-repudiation            | None, high                    |
 
-### Integrity
+Use the three recovery objectives to document your business continuity plan.
+For example, a payroll team might agree on the following targets.
 
-Defines the level of data integrity requirements:
+| Recovery objective               | Question it answers                                 | Example    |
+| -------------------------------- | --------------------------------------------------- | ---------- |
+| Recovery Point Objective (RPO)   | How much recent data can we lose, measured in time? | 15 minutes |
+| Recovery Time Objective (RTO)    | How soon should service be restored?                | 4 hours    |
+| Maximum Tolerable Downtime (MTD) | How long can the business tolerate an outage?       | 8 hours    |
 
-- **None**
-- **Normal**
-- **High**
-- **Very High**
+When you enter a positive RTO, enter an MTD at least as long. iTop checks this
+when either value changes. In the example above, an MTD of three hours would
+prevent saving because it is shorter than the four-hour recovery target.
 
-### Availability
+## Find gaps between applications and infrastructure
 
-Defines the level of system availability requirements:
+When iTop audit management is available, setup installs five rules in the
+**Risk Management Mismatch** category, one per protection field. They compare
+an application solution with its directly linked servers, farms, hypervisors,
+and virtual machines. A rule flags the linked CI when its protection level is
+lower than the application requires or the required rating is missing.
 
-- **None**
-- **Normal**
-- **High**
-- **Very High**
+To try the payroll example, link the server to the application solution, save
+the two availability ratings, and run the **Risk Management** audit. The server
+appears under the availability rule.
 
-### Authenticity
+## Share assessments
 
-Defines whether authenticity checks are required:
+The **Risk Manager** and **Risk Agent** profiles grant write access to
+application solutions and business processes. Risk Managers can also update
+these objects in bulk.
 
-- **None**
-- **High**
+The portal provides read-only assessment views for application solutions and
+business processes. If you select System Landscape (br-landscape 3.2.2 or later)
+alongside Risk Assessment, iTop Setup automatically selects the bundled bridge.
+The application solution form then shows **System landscape** as a read-only field.
 
-### Non-repudiation
+Contacts can view objects they are linked to. Portal power
+users can also view objects belonging to their organization.
 
-Defines whether non-repudiation checks are required:
+## Languages and project information
 
-- **None**
-- **High**
+The extension includes English, German, and Russian translations. Thanks to
+[Konstantin Nikulin][translator] for the Russian translation.
 
-### Business Continuity Management (BCM)
+- [Run the local tests and XML schema checks](tests/README.md)
+- [Prepare and publish a release](scripts/README.md)
+- [GPL-3.0 license](LICENSE) · Copyright © 2021–2026 Björn Rudner
 
-Key BCM metrics to aid in recovery planning:
-
-- **RPO**: Recovery Point Objective – the maximum acceptable data loss in case of an incident.
-- **RTO**: Recovery Time Objective – the target time for restoring operations after an incident.
-- **MTD**: Maximum Tolerable Downtime – the maximum time the organization can sustain without critical functions.
-
-## Compatibility
-
-### iTop Version Compatibility
-
-The extension is compatible with the following versions of iTop:
-
-- **iTop 2.7 and 3.1**: [2.7 branch](https://github.com/rudnerbjoern/iTop-br-riskassessment/tree/itop/2.7)
-- **iTop 3.2 and above**: [Main branch](https://github.com/rudnerbjoern/iTop-br-riskassessment/tree/main)
-
-This extension has been successfully tested on iTop versions:
-
-- 2.7.10
-- 3.2.1
-
-## Development and releases
-
-- [Local PHP tests and XML schema validation](tests/README.md)
-- [Release preparation and publication](scripts/README.md)
-
-CI runs secret scanning, PHP tests, and XSD validation on every push and every
-pull request targeting `main`. Merging a same-repository `release/X.Y.Z` pull request automatically
-publishes the matching tag, extension ZIP, checksum, and GitHub Release after
-verifying the required PR checks.
-
-## Translations
-
-Special thanks to [Konstantin Nikulin](https://github.com/apollo2k4) for providing the Russian translation.
-
-## License & Attribution
-
-This project is licensed under the GPL-3.0 License © 2021-2026 Björn Rudner.
-
-For details, refer to the [LICENSE](https://github.com/rudnerbjoern/iTop-br-riskassessment/blob/main/LICENSE) file.
-
----
-
-With this iTop extension, enhance your organization’s approach to risk management by ensuring all critical risk and BCM metrics are documented effectively and centrally.
+[releases]: https://github.com/rudnerbjoern/iTop-br-riskassessment/releases
+[itop-32]: https://github.com/rudnerbjoern/iTop-br-riskassessment/tree/itop/3.2
+[itop-27]: https://github.com/rudnerbjoern/iTop-br-riskassessment/tree/itop/2.7
+[translator]: https://github.com/apollo2k4

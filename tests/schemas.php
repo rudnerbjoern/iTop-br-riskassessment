@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 $schemaDirectory = getenv('ITOP_SCHEMA_DIR') ?: __DIR__ . '/../.tmp/schemas';
 $documents = [
+    'System Landscape bridge matches the iTop 3.3 XSD' => [
+        'br-riskassessment-bridge-for-br-landscape/datamodel.br-riskassessment-bridge-for-br-landscape.xml', '3.3/itop_design.xsd',
+    ],
     'extension manifest matches its XSD' => ['extension.xml', 'extension.xsd'],
-    'Risk Assessment data model matches the iTop 3.2 XSD' => [
-        'br-riskassessment/datamodel.br-riskassessment.xml', '3.2/itop_design.xsd',
+    'Risk Assessment data model matches the iTop 3.3 XSD' => [
+        'br-riskassessment/datamodel.br-riskassessment.xml', '3.3/itop_design.xsd',
     ],
 ];
 
