@@ -1,6 +1,6 @@
 # Commit-message generation
 
-Generate a message only for the staged change in this iTop 3.2 Risk Assessment extension project.
+Generate a message only for the staged change in this iTop 3.3 Risk Assessment extension project.
 Use English and this header:
 
 ```text

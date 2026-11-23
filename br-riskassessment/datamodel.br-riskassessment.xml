@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<itop_design version="3.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://rudnerbjoern.github.io/iTop-schema/3.2/itop_design.xsd">
+<itop_design version="3.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://rudnerbjoern.github.io/iTop-schema/3.3/itop_design.xsd">
     <!--
     * @copyright   Copyright (C) 2024-2026 Björn Rudner
     * @license     https://www.gnu.org/licenses/gpl-3.0.en.html
@@ -244,10 +244,9 @@
                 <details>
                     <items>
                         <item id="col:col2" _delta="must_exist">
-                            <rank>90</rank>
                             <items>
                                 <item id="fieldset:FunctionalCI:RiskManagement" _delta="define">
-                                    <rank>15</rank>
+                                    <rank>150</rank>
                                     <items>
                                         <item id="rm_confidentiality">
                                             <rank>10</rank>
@@ -305,10 +304,9 @@
                 <details>
                     <items>
                         <item id="col:col2" _delta="must_exist">
-                            <rank>90</rank>
                             <items>
                                 <item id="fieldset:FunctionalCI:RiskManagement" _delta="define">
-                                    <rank>15</rank>
+                                    <rank>150</rank>
                                     <items>
                                         <item id="rm_confidentiality">
                                             <rank>10</rank>
@@ -365,11 +363,10 @@
             <presentation>
                 <details>
                     <items>
-                        <item id="col:col2">
-                            <rank>130</rank>
+                        <item id="col:col2" _delta="must_exist">
                             <items>
                                 <item id="fieldset:FunctionalCI:RiskManagement" _delta="define">
-                                    <rank>30</rank>
+                                    <rank>150</rank>
                                     <items>
                                         <item id="rm_confidentiality">
                                             <rank>10</rank>
@@ -426,32 +423,36 @@
             <presentation>
                 <details>
                     <items>
-                        <item id="fieldset:FunctionalCI:RiskManagement" _delta="define">
-                            <rank>150</rank>
+                        <item id="col:col2" _delta="must_exist">
                             <items>
-                                <item id="rm_confidentiality">
-                                    <rank>10</rank>
-                                </item>
-                                <item id="rm_integrity">
-                                    <rank>20</rank>
-                                </item>
-                                <item id="rm_availability">
-                                    <rank>30</rank>
-                                </item>
-                                <item id="rm_authenticity">
-                                    <rank>40</rank>
-                                </item>
-                                <item id="rm_nonrepudiation">
-                                    <rank>50</rank>
-                                </item>
-                                <item id="bcm_rpo">
-                                    <rank>60</rank>
-                                </item>
-                                <item id="bcm_rto">
-                                    <rank>70</rank>
-                                </item>
-                                <item id="bcm_mtd">
-                                    <rank>80</rank>
+                                <item id="fieldset:FunctionalCI:RiskManagement" _delta="define">
+                                    <rank>150</rank>
+                                    <items>
+                                        <item id="rm_confidentiality">
+                                            <rank>10</rank>
+                                        </item>
+                                        <item id="rm_integrity">
+                                            <rank>20</rank>
+                                        </item>
+                                        <item id="rm_availability">
+                                            <rank>30</rank>
+                                        </item>
+                                        <item id="rm_authenticity">
+                                            <rank>40</rank>
+                                        </item>
+                                        <item id="rm_nonrepudiation">
+                                            <rank>50</rank>
+                                        </item>
+                                        <item id="bcm_rpo">
+                                            <rank>60</rank>
+                                        </item>
+                                        <item id="bcm_rto">
+                                            <rank>70</rank>
+                                        </item>
+                                        <item id="bcm_mtd">
+                                            <rank>80</rank>
+                                        </item>
+                                    </items>
                                 </item>
                             </items>
                         </item>
@@ -482,32 +483,36 @@
             <presentation>
                 <details>
                     <items>
-                        <item id="fieldset:FunctionalCI:RiskManagement" _delta="define">
-                            <rank>150</rank>
+                        <item id="col:col2" _delta="must_exist">
                             <items>
-                                <item id="rm_confidentiality">
-                                    <rank>10</rank>
-                                </item>
-                                <item id="rm_integrity">
-                                    <rank>20</rank>
-                                </item>
-                                <item id="rm_availability">
-                                    <rank>30</rank>
-                                </item>
-                                <item id="rm_authenticity">
-                                    <rank>40</rank>
-                                </item>
-                                <item id="rm_nonrepudiation">
-                                    <rank>50</rank>
-                                </item>
-                                <item id="bcm_rpo">
-                                    <rank>60</rank>
-                                </item>
-                                <item id="bcm_rto">
-                                    <rank>70</rank>
-                                </item>
-                                <item id="bcm_mtd">
-                                    <rank>80</rank>
+                                <item id="fieldset:FunctionalCI:RiskManagement" _delta="define">
+                                    <rank>150</rank>
+                                    <items>
+                                        <item id="rm_confidentiality">
+                                            <rank>10</rank>
+                                        </item>
+                                        <item id="rm_integrity">
+                                            <rank>20</rank>
+                                        </item>
+                                        <item id="rm_availability">
+                                            <rank>30</rank>
+                                        </item>
+                                        <item id="rm_authenticity">
+                                            <rank>40</rank>
+                                        </item>
+                                        <item id="rm_nonrepudiation">
+                                            <rank>50</rank>
+                                        </item>
+                                        <item id="bcm_rpo">
+                                            <rank>60</rank>
+                                        </item>
+                                        <item id="bcm_rto">
+                                            <rank>70</rank>
+                                        </item>
+                                        <item id="bcm_mtd">
+                                            <rank>80</rank>
+                                        </item>
+                                    </items>
                                 </item>
                             </items>
                         </item>
@@ -635,17 +640,16 @@
                     <class>ApplicationSolution</class>
                     <fields />
                     <twig>
-                        <div class="row">
-                            <div class="col-sm-7">
+                        <div id="riskassessment-app-row" class="row">
+                            <div id="riskassessment-app-details" class="col-sm-7">
                                 <fieldset>
                                     <legend>{{'Server:baseinfo'|dict_s}}</legend>
                                     <div class="col-sm-6">
                                         <div class="form_field" data-field-id="name" data-field-flags="read_only" />
                                         <div class="form_field" data-field-id="org_id" data-field-flags="read_only" />
                                     </div>
-                                    <div class="col-sm-6">
+                                    <div id="riskassessment-app-classification" class="col-sm-6">
                                         <div class="form_field" data-field-id="status" data-field-flags="read_only" />
-                                        <div class="form_field" data-field-id="system_landscape" data-field-flags="read_only" />
                                         <div class="form_field" data-field-id="business_criticity" data-field-flags="read_only" />
                                         <div class="form_field" data-field-id="move2production" data-field-flags="read_only" />
                                     </div>

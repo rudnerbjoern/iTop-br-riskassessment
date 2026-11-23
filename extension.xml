@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <extension format="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="https://rudnerbjoern.github.io/iTop-schema/extension.xsd">
-    <extension_code>
-        <![CDATA[br-riskassessment]]>
-    </extension_code>
+    <extension_code>br-riskassessment</extension_code>
     <company>
         <![CDATA[]]>
     </company>
@@ -16,14 +14,16 @@
     <description>
         <![CDATA[Adds the ability to document risk parameters on CIs.]]>
     </description>
-    <version><![CDATA[3.2.2]]></version>
-    <release_date><![CDATA[2026-11-06]]></release_date>
+    <version><![CDATA[3.3.0]]></version>
+    <modules type="array">
+        <module><id>br-riskassessment</id><version><![CDATA[3.3.0]]></version></module>
+        <module><id>br-riskassessment-bridge-for-br-landscape</id><version><![CDATA[3.3.0]]></version></module>
+    </modules>
+    <release_date><![CDATA[2026-11-23]]></release_date>
     <version_description>
-        <![CDATA[]]>
+        <![CDATA[Requires iTop 3.3.0 or later. Integrates risk and recovery fields into the native detail layouts, makes repeated audit setup safe, and corrects the non-repudiation audit rule while preserving customized queries. An optional bridge displays System Landscape on the application solution portal form.]]>
     </version_description>
-    <itop_version_min>
-        <![CDATA[3.2.0]]>
-    </itop_version_min>
+    <itop_version_min>3.3.0</itop_version_min>
     <status>stable</status>
     <mandatory>false</mandatory>
     <more_info_url>

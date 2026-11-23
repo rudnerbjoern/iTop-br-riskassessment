@@ -1,9 +1,12 @@
 ## 📦 Installation
 
+Requires iTop 3.3.0 or later with Configuration Management, Enhanced Customer
+Portal and the standard ITIL profiles.
+
 1. Download the `br-riskassessment-vX.Y.Z.zip` asset attached to this release.
 2. Extract its contents into your iTop installation's `extensions/` directory,
    preserving the included folder structure. The package creates a single
-   `extensions/br-riskassessment/` folder containing the manifest and module.
+   `extensions/br-riskassessment/` folder containing the manifest, base module and optional System Landscape bridge.
 3. Run iTop setup and select **Datamodel: Risk Assessment** to activate the extension.
 
 ### Verify your download

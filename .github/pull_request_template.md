@@ -24,7 +24,8 @@ Please confirm the following (or remove if not applicable):
 - [ ] All new fields and classes are documented
 - [ ] No unintended changes to existing behavior
 - [ ] Changes are tested (manually or automatically)
-- [ ] Compatible with existing iTop installations
+- [ ] Compatible with iTop 3.3.0 or later
+- [ ] For releases, the branch, manifest and module versions match, and the manifest records the release date and summary
 
 ## :test_tube: Test Instructions
 <!-- If applicable, describe how to test the changes -->

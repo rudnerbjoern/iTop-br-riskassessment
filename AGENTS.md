@@ -5,7 +5,7 @@ Treat MUST and MUST NOT as mandatory requirements.
 
 ## Project identity and scope
 
-- You MUST treat this repository as `iTop-br-riskassessment`, an iTop 3.2
+- You MUST treat this repository as `iTop-br-riskassessment`, an iTop 3.3
   extension for information security protection requirements and BCM recovery
   objectives on `FunctionalCI`, including audit rules and portal views.
 - You MUST derive branch names, commit messages, and pull request content from
@@ -38,7 +38,7 @@ Treat MUST and MUST NOT as mandatory requirements.
   letters, digits, and hyphens in the description.
 - For release preparation, you MUST instead use `release/<version>`, where
   `<version>` is the target version in `X.Y.Z` format without a `v` prefix,
-  for example `release/3.2.3`. This is an explicit exception to the description
+  for example `release/3.3.1`. This is an explicit exception to the description
   format above. You MUST NOT use `build/` or `chore/` for release preparation.
 - You MUST select exactly one prefix according to the primary task outcome:
 
@@ -105,6 +105,7 @@ Treat MUST and MUST NOT as mandatory requirements.
 - Before requesting or executing a merge of a same-repository `release/X.Y.Z`
   pull request into `main`, you MUST state that merging automatically publishes
   the release tag, ZIP package, and GitHub Release. You MUST ensure the branch
-  version matches the manifest and module versions and the required PR checks
-  have succeeded. You MUST treat authorization to merge that release PR as
+  version matches the manifest and the PHP registration versions of both bundled modules.
+  Verify the release date, release summary, minimum iTop version and successful
+  required PR checks. You MUST treat authorization to merge that release PR as
   authorization for its automatic publication.
