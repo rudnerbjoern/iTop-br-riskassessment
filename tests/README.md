@@ -6,7 +6,7 @@ First download the two standalone schemas used by the project's XML files:
 ```sh
 mkdir -p .tmp/schemas/3.3
 curl --fail --location https://rudnerbjoern.github.io/iTop-schema/extension.xsd -o .tmp/schemas/extension.xsd
-curl --fail --location https://rudnerbjoern.github.io/iTop-schema/3.3/itop_design.xsd -o .tmp/schemas/3.3/itop_design.xsd
+curl --fail --location https://rudnerbjoern.github.io/iTop-schema/dist/3.3/itop_design.xsd -o .tmp/schemas/3.3/itop_design.xsd
 ```
 
 PowerShell alternative:
@@ -14,7 +14,7 @@ PowerShell alternative:
 ```powershell
 New-Item -ItemType Directory -Force .tmp/schemas/3.3 | Out-Null
 Invoke-WebRequest https://rudnerbjoern.github.io/iTop-schema/extension.xsd -OutFile .tmp/schemas/extension.xsd
-Invoke-WebRequest https://rudnerbjoern.github.io/iTop-schema/3.3/itop_design.xsd -OutFile .tmp/schemas/3.3/itop_design.xsd
+Invoke-WebRequest https://rudnerbjoern.github.io/iTop-schema/dist/3.3/itop_design.xsd -OutFile .tmp/schemas/3.3/itop_design.xsd
 ```
 
 Alternatively, set `ITOP_SCHEMA_DIR` to an existing iTop-schema checkout containing

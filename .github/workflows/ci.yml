@@ -91,7 +91,7 @@ jobs:
             https://rudnerbjoern.github.io/iTop-schema/extension.xsd \
             --output .tmp/schemas/extension.xsd
           curl --fail --silent --show-error --location --retry 3 --max-time 60 \
-            https://rudnerbjoern.github.io/iTop-schema/3.3/itop_design.xsd \
+            https://rudnerbjoern.github.io/iTop-schema/dist/3.3/itop_design.xsd \
             --output .tmp/schemas/3.3/itop_design.xsd
 
       - name: Run PHP tests and schema validation
